@@ -16,22 +16,28 @@ description: 为任意项目生成"多 Agent AI 宪法"共享知识库（README 
 
 ## 快速开始
 
-1. 将 `templates/` 下的文件复制到目标项目根目录：
-   - `CONTEXT.md` → 目标项目 **`.github/CONTEXT.md`**（其余文件放项目根目录）
+1. 将 `templates/` 下的文件复制到目标项目（**注意安装位置**）：
+   - `CONTEXT.md` → `.github/CONTEXT.md`
+   - `.github/PULL_REQUEST_TEMPLATE.md` → `.github/PULL_REQUEST_TEMPLATE.md`（交接单，GitHub 会自动套用到新 PR）
+   - 其余文件 → 项目根目录（`AGENTS.md`、`CLAUDE.md`、`README.md`、`STATE.md`、`ARCHITECTURE.md`、`AGENT_GUIDELINES.md`、`API_CONTRACT.md`、`CODING_STANDARDS.md`、`DECISION_LOG.md`）
 2. 填写占位符：
    - `XXX` 系统 / `YYY` 特性 / `ZZZ` 不处理的场景（CONTEXT.md）
    - Agent 分工表、技术栈、当前阶段（CONTEXT.md）
    - 任务列表负责人（README.md）
-3. 在 DECISION_LOG.md 追加两条决策：
+   - **验收命令**（AGENTS.md 的 Dev Tips + STATE.md 的「✅ 验收」——必须是一条与模型/工具无关的命令）
+3. 初始化接力棒 `STATE.md`：当前任务 / 下一步 / 验收结果都填**真实值**，不留模板占位符
+4. 在 DECISION_LOG.md 追加两条决策：
    - `项目信息正式入册`
    - `任命 <某 Agent> 为主 Agent`（主 Agent 权限见 README「治理结构」审批权矩阵）
-4. `git init` + 首次提交（默认分支 `main`）
-5. 把仓库推送到 GitHub —— 宪法随项目走，任何 Agent 克隆后即自动进入协作流程
+5. `git init` + 首次提交（默认分支 `main`）
+6. 把仓库推送到 GitHub —— 宪法随项目走，任何 Agent 克隆后即自动进入协作流程
 
 ## 核心原则
 
 - **文档即宪法**：所有 Agent 读同一份"剧本"，不需要 Agent 之间互相通信
-- **Truth Source 唯一**：状态与规则只存在文档里，不依赖任何单个工具的本地记忆
+- **Truth Source 唯一**：状态与规则只存在文档里，不依赖任何单个工具的本地记忆（本地记忆只能当加速器）
+- **接力棒优先**：接手先读 `STATE.md`（现在到哪了）；**每轮收尾必须更新它——不更新=本轮未完成**
+- **验收锚点**：每个项目写死**一条与模型/工具无关的验收命令**，换模型后仍以它为准
 - **只读优先**：Agent 对宪法的默认动作是"读"；所有修改走 PR + 审批
 - **渐进式披露**：入口文件（AGENTS.md/README.md）短小，细节分层到各规范文件
 - **模型 / 工具无关**：纯自然语言 Markdown，无工具私有指令语法；AGENTS.md 兼容社区开放标准
@@ -71,7 +77,10 @@ description: 为任意项目生成"多 Agent AI 宪法"共享知识库（README 
 | 文件 | 安装位置 | 作用 |
 |---|---|---|
 | `AGENTS.md` | 项目根 | 社区标准入口（工具自动发现） |
-| `README.md` | 项目根 | 宪法总纲 + 治理结构 + 任务列表 |
+| `CLAUDE.md` | 项目根 | Claude Code / DSH 的入口指针（3 行指向 AGENTS.md，不重复定义规则） |
+| `README.md` | 项目根 | 宪法总纲 + 治理结构 + 任务列表 + 交接与验收 |
+| `STATE.md` | 项目根 | **接力棒**：当前任务 / 进度光标 / 下一步 / 阻塞 / 已知坑 / 验收结果 |
+| `.github/PULL_REQUEST_TEMPLATE.md` | `.github/` | **交接单**：PR 的"交接五问" + 提交前自检 |
 | `CONTEXT.md` | `.github/CONTEXT.md` | 项目上下文 + 红线 |
 | `ARCHITECTURE.md` | 项目根 | 架构规范 + 变更审批 |
 | `AGENT_GUIDELINES.md` | 项目根 | Agent 行为准则 + 工作流 |
