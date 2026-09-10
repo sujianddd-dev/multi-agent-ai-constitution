@@ -16,6 +16,7 @@
 
 ## 📚 必读顺序
 
+0. 🔥 [STATE.md](./STATE.md) — **接力棒：当前任务 / 进度光标 / 下一步 / 阻塞 / 验收**（1 分钟，**接手已有工作必读**）
 1. [README.md](./README.md) — 宪法总纲（2 分钟）
 2. [CONTEXT.md](./.github/CONTEXT.md) — 项目上下文：我们在做什么、当前阶段、分工（5 分钟）
 3. [ARCHITECTURE.md](./ARCHITECTURE.md) — 架构规范：模块边界、架构红线（10 分钟）
@@ -30,7 +31,7 @@
 
 > 以下为占位示例，请按项目实际命令替换。
 
-- 运行全部测试：`pytest`（或项目规定的测试命令）
+- **验收命令**（唯一锚点，必须一条命令跑完、与模型/工具无关）：`pytest`（或项目规定的命令）
 - 运行代码检查：按 CODING_STANDARDS.md 中"语言与格式"章节执行
 - 提交前自检：对照 CODING_STANDARDS.md 的"提交前自检清单"逐项打勾
 
@@ -39,6 +40,7 @@
 ## 📤 PR 要求
 
 - 标题格式：`<type>(<scope>): <subject>`（type/scope 定义见 CODING_STANDARDS.md）
-- PR 描述必须引用本次任务依据的规范文档与相关章节
+- **PR 描述按 [`.github/PULL_REQUEST_TEMPLATE.md`](./.github/PULL_REQUEST_TEMPLATE.md) 的"交接五问"填写**（依据 / 改了什么 / 怎么验证 / 遗留什么 / 下一步给谁）
 - 不确定的事项：在 PR 中显式标注，**保守对待，先问再做**
+- **必须更新 [STATE.md](./STATE.md)**——未更新的 PR 视为未完成
 - 禁止直接推送到 main 分支
