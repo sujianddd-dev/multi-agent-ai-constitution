@@ -5,7 +5,7 @@
 >
 > **铁律**：每轮收尾必须更新本文件（不更新 = 本轮未完成）｜只写**当前**，历史归 [CHANGELOG.md](./CHANGELOG.md) 与 PR｜全文件 ≤ 50 行｜**坏消息优先写**
 
-**更新时间**：2026-09-17 11:30 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
+**更新时间**：2026-09-17 11:40 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
 **上一手**：DSH（2026-09-10，交接层作为**模板**落库，PR #1）
 
 ## 🎯 当前任务（一次只写一个）
@@ -18,7 +18,7 @@
 
 - 已完成（2026-09-10）：交接层作为**模板**落库（PR #1）——`templates/STATE.md`、`templates/.github/PULL_REQUEST_TEMPLATE.md`、`docs/ENTRY-POINTS.md`、`docs/WHY.md`
 - 本分支（`feat/doctrine-and-self-adoption`，**未提交**）：① 仓库自用交接层（`AGENTS.md` / `CLAUDE.md` / `STATE.md` / `.github/PULL_REQUEST_TEMPLATE.md` / `scripts/verify.sh` / `scripts/check-links.mjs`）② 工程信条落库（`docs/DOCTRINE.md` + 模板条款补充 + 新模板 `RISK_PLAYBOOK.md`）
-- 关联 PR：待开（本轮收尾前回填编号）
+- 关联 PR：**[#2](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/2)**（工程信条 + 仓库自用交接层；已推送，等待人类 review）
 
 ## ⏭️ 下一步（接手第一件事）
 
