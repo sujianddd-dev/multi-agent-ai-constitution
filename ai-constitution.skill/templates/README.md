@@ -40,7 +40,11 @@
 | [Agent 准则](./AGENT_GUIDELINES.md) | 工作流程、命名约定、审查重点、禁止操作 | 人类 |
 | [API 约定](./API_CONTRACT.md) | 接口规范、数据格式 | 仅人类（任何 Agent 不可擅改） |
 | [代码标准](./CODING_STANDARDS.md) | 编码规范、提交规范、测试要求 | 人类 + 主 Agent |
-| [决策日志](./DECISION_LOG.md) | 所有重要决策及其原因 | 追加：人类 + 主 Agent |
+| [决策日志](./DECISION_LOG.md) | 所有重要决策及其原因（**= 本项目的 ADR**） | 追加：人类 + 主 Agent |
+| [风险响应手册](./RISK_PLAYBOOK.md) | **护栏**：分级触发条件 / 处置动作 / 复盘防复发 | 人类 + 主 Agent |
+
+> 🧭 **工程信条（协议优先 · 灰度闭环 · 迭代严谨 · 风险护栏）** 见上游 [docs/DOCTRINE.md](https://github.com/sujianddd-dev/multi-agent-ai-constitution/blob/main/docs/DOCTRINE.md)。
+> 本模板中对应**可填写条款**：`ARCHITECTURE.md`「协议优先 / 聚合展现」· `AGENT_GUIDELINES.md`「灰度前置 / 回滚 / 风险分级响应」· `API_CONTRACT.md`「IO 事务与幂等」· `CODING_STANDARDS.md`「TDD 节奏」· `DECISION_LOG.md`（=ADR）
 
 ---
 
@@ -138,6 +142,20 @@
 - **人类友好**：人也能理解 AI 在做什么 👤
 
 > 修改本文件仅限**人类本人**；如需他人代改，须人类逐次明确批准。
+
+---
+
+## 🧭 工程信条（How We Build）
+
+> 完整版见上游 [docs/DOCTRINE.md](https://github.com/sujianddd-dev/multi-agent-ai-constitution/blob/main/docs/DOCTRINE.md)；此处只列**本宪法要求项目遵守的五条**。
+
+1. **不回到重型前置规划**：计划只做到"下一个可验证增量"；契约 / ADR 是**增量沉淀**，不是开工仪式
+2. **MVP + 灰度数据闭环**：涉及用户可见变更时，动手前必须写清 **指标 / 分层采样 / 归因 / 关门阈值**（见 `AGENT_GUIDELINES.md`「🚦 灰度前置」）
+3. **迭代内部仍要严谨**：契约与 IO 事务（`API_CONTRACT.md`）· TDD（`CODING_STANDARDS.md`）· ADR（`DECISION_LOG.md`）· 可回滚（`AGENT_GUIDELINES.md`「↩️ 回滚」）
+4. **协议优先 + 聚合展现**：先定协议再写实现；表现层只做聚合，**不承载业务规则**（`ARCHITECTURE.md`）
+5. **承认 vibecoding 的隐蔽负债**：流程必须有护栏——分级响应 playbook（[RISK_PLAYBOOK.md](./RISK_PLAYBOOK.md)）：**触发条件 / 处置动作 / 复盘防复发**
+
+> 总纲一句话：**软件 = 协议优先的微服务 + 灵活聚合的表现层**；解耦就是控制上下文，聚合就是用好 token 的灵活性。
 
 ---
 

@@ -16,10 +16,13 @@ description: 为任意项目生成"多 Agent AI 宪法"共享知识库（README 
 
 ## 快速开始
 
-1. 将 `templates/` 下的文件复制到目标项目（**注意安装位置**）：
-   - `CONTEXT.md` → `.github/CONTEXT.md`
-   - `.github/PULL_REQUEST_TEMPLATE.md` → `.github/PULL_REQUEST_TEMPLATE.md`（交接单，GitHub 会自动套用到新 PR）
-   - 其余文件 → 项目根目录（`AGENTS.md`、`CLAUDE.md`、`README.md`、`STATE.md`、`ARCHITECTURE.md`、`AGENT_GUIDELINES.md`、`API_CONTRACT.md`、`CODING_STANDARDS.md`、`DECISION_LOG.md`）
+1. 把模板复制到目标项目（**一条命令**；`/.` 会把 `.github/` 等点目录一并带入）：
+   ```bash
+   cp -r ai-constitution.skill/templates/. <你的项目>/
+   ```
+   - **模板目录 = 分发后的布局**（结构即真实，不再需要"复制后手工归位"）：
+     - 项目根：`AGENTS.md`、`CLAUDE.md`、`README.md`、`STATE.md`、`ARCHITECTURE.md`、`AGENT_GUIDELINES.md`、`API_CONTRACT.md`、`CODING_STANDARDS.md`、`DECISION_LOG.md`、`RISK_PLAYBOOK.md`
+     - `.github/`：`CONTEXT.md`（项目上下文）、`PULL_REQUEST_TEMPLATE.md`（交接单，GitHub 自动套用到新 PR）
 2. 填写占位符：
    - `XXX` 系统 / `YYY` 特性 / `ZZZ` 不处理的场景（CONTEXT.md）
    - Agent 分工表、技术栈、当前阶段（CONTEXT.md）
@@ -42,6 +45,7 @@ description: 为任意项目生成"多 Agent AI 宪法"共享知识库（README 
 - **渐进式披露**：入口文件（AGENTS.md/README.md）短小，细节分层到各规范文件
 - **模型 / 工具无关**：纯自然语言 Markdown，无工具私有指令语法；AGENTS.md 兼容社区开放标准
 - **红线显式化**：禁止事项、审批权矩阵写死在文档里，杜绝"我以为可以"
+- **工程信条对齐**：项目须遵守工程信条五条——**协议优先 + 聚合展现** · 不重型前置规划 · MVP + **灰度数据闭环** · 迭代严谨（契约-IO 事务 / TDD / ADR / 回滚）· **风险护栏**（分级响应 playbook）
 
 ## 治理要点（生成后）
 
@@ -80,10 +84,11 @@ description: 为任意项目生成"多 Agent AI 宪法"共享知识库（README 
 | `CLAUDE.md` | 项目根 | Claude Code / DSH 的入口指针（3 行指向 AGENTS.md，不重复定义规则） |
 | `README.md` | 项目根 | 宪法总纲 + 治理结构 + 任务列表 + 交接与验收 |
 | `STATE.md` | 项目根 | **接力棒**：当前任务 / 进度光标 / 下一步 / 阻塞 / 已知坑 / 验收结果 |
-| `.github/PULL_REQUEST_TEMPLATE.md` | `.github/` | **交接单**：PR 的"交接五问" + 提交前自检 |
-| `CONTEXT.md` | `.github/CONTEXT.md` | 项目上下文 + 红线 |
-| `ARCHITECTURE.md` | 项目根 | 架构规范 + 变更审批 |
-| `AGENT_GUIDELINES.md` | 项目根 | Agent 行为准则 + 工作流 |
-| `API_CONTRACT.md` | 项目根 | 接口契约（不可擅改） |
-| `CODING_STANDARDS.md` | 项目根 | 代码与提交规范 |
-| `DECISION_LOG.md` | 项目根 | 决策历史（只追加） |
+| `.github/CONTEXT.md` | `.github/` | 项目上下文 + 红线 |
+| `.github/PULL_REQUEST_TEMPLATE.md` | `.github/` | **交接单**：PR"交接五问" + 灰度四要素 + 提交前自检 |
+| `ARCHITECTURE.md` | 项目根 | 架构规范：**协议优先 + 聚合展现** + 变更审批 |
+| `AGENT_GUIDELINES.md` | 项目根 | Agent 行为准则：工作流 / **灰度前置** / **回滚** / **风险分级响应** |
+| `API_CONTRACT.md` | 项目根 | 接口契约（不可擅改）+ **IO 事务与幂等** |
+| `CODING_STANDARDS.md` | 项目根 | 代码与提交规范 + **TDD 节奏** + 回滚粒度 |
+| `DECISION_LOG.md` | 项目根 | 决策历史（只追加）= **本项目的 ADR** |
+| `RISK_PLAYBOOK.md` | 项目根 | **风险护栏**：分级触发条件 / 处置动作 / 复盘防复发 |

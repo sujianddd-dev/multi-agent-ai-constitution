@@ -21,7 +21,8 @@
 - `AGENT_GUIDELINES.md` —— Agent 工作流程 / 命名约定 / 禁止操作
 - `API_CONTRACT.md` —— 接口契约（**任何 Agent 不可擅改**）
 - `CODING_STANDARDS.md` —— 代码与提交规范
-- `DECISION_LOG.md` —— 决策历史（只追加不删除）
+- `DECISION_LOG.md` —— 决策历史（只追加不删除，**= 本项目的 ADR**）
+- `RISK_PLAYBOOK.md` —— **风险护栏**：分级触发条件 / 处置动作 / 复盘防复发
 
 **交接层（切 Agent / 切模型不丢进度）**
 
@@ -33,11 +34,8 @@
 ## 快速开始
 
 ```bash
-# 1. 复制模板到你的项目（注意：* 不含点目录，.github/ 要单独复制）
-mkdir -p <你的项目>/.github
-cp -r ai-constitution.skill/templates/* <你的项目>/
-cp -r ai-constitution.skill/templates/.github/. <你的项目>/.github/   # PR 交接单
-mv <你的项目>/CONTEXT.md <你的项目>/.github/CONTEXT.md                # CONTEXT 归位到 .github/
+# 1. 复制模板到你的项目（模板目录 = 分发后的布局；`/.` 会带上 .github/ 等点目录）
+cp -r ai-constitution.skill/templates/. <你的项目>/
 
 # 2. 填写占位符（XXX 系统、YYY 特性、Agent 分工、技术栈、验收命令……）
 # 3. 初始化 STATE.md（接力棒：当前任务 / 下一步 / 验收结果，填真实值）
@@ -67,6 +65,8 @@ git init && git add -A && git commit -m "docs: 建立 AI 宪法（共享知识�
 | 9 | 治理结构（README 模板） | 审批权矩阵通用版 | 任命你的主 Agent；按团队规模增删权限 |
 | 10 | 阶段与任务 | Phase 1 占位 | 你的实际进度、任务与负责人 |
 | 11 | 隐私与合规红线 | 通用表述 | 按你的数据合规要求增删（哪些数据不碰、哪些必须加密） |
+| 12 | **灰度四要素**（STATE.md / PR 模板） | 空占位 | 你的**指标 / 分层采样 / 归因口径 / 关门阈值**——涉及用户可见变更时**动手前**必填 |
+| 13 | **风险护栏**（RISK_PLAYBOOK.md） | 占位阈值 | 你的分级触发条件与处置动作（P0/P1/P2 阈值、通知渠道、回滚方式） |
 
 **适配技巧（渐进式披露）：**
 
@@ -86,6 +86,23 @@ git init && git add -A && git commit -m "docs: 建立 AI 宪法（共享知识�
 
 > 📖 完整的设计依据、两种解法对比（单向读取 vs 互相通信）、边界与代价：**[docs/WHY.md](./docs/WHY.md)**
 > 🚪 各 Agent 工具的入口约定与全局协议层配置：**[docs/ENTRY-POINTS.md](./docs/ENTRY-POINTS.md)**
+> 🧭 工程信条（协议优先 / 灰度闭环 / 迭代严谨 / 风险护栏）：**[docs/DOCTRINE.md](./docs/DOCTRINE.md)**
+
+---
+
+## 🧭 工程信条（How We Build）
+
+> 完整版见 **[docs/DOCTRINE.md](./docs/DOCTRINE.md)**。总纲一句话：**软件 = 协议优先的微服务 + 灵活聚合的表现层**——解耦就是控制上下文，聚合就是用好 token 的灵活性。
+
+| # | 信条 | 一句话 | 模板落点 |
+|---|---|---|---|
+| 1 | **不回到重型前置规划** | 计划只做到"下一个可验证增量"；契约与 ADR 是**增量沉淀**，不是开工仪式 | `AGENT_GUIDELINES.md` 工作流程 |
+| 2 | **MVP + 灰度数据闭环** | 涉及用户可见变更，动手前写清 **指标 / 分层采样 / 归因 / 关门阈值**（事后补写不算） | `STATE.md`「灰度」+ `AGENT_GUIDELINES.md`「🚦 灰度前置」+ PR 模板 |
+| 3 | **迭代内部仍要严谨** | 契约-**IO 事务** · 测试-**TDD** · 可观测-**ADR** · 回滚-**git**（快 ≠ 糙） | `API_CONTRACT.md` / `CODING_STANDARDS.md` / `DECISION_LOG.md` / `AGENT_GUIDELINES.md` |
+| 4 | **协议优先 + 聚合展现** | 先定协议再写实现；表现层只做聚合，**不承载业务规则** | `ARCHITECTURE.md`「协议优先 / 聚合展现」 |
+| 5 | **承认 vibecoding 的隐蔽负债** | 流程必须有护栏：**触发条件 / 处置动作 / 复盘防复发** | `RISK_PLAYBOOK.md`（新） |
+
+> 判断信条是否真正生效，看三问能否答上：**坏了怎么退回？凭什么说它对？下一手怎么知道为什么这么做？**
 
 ## 参考
 
