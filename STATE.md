@@ -1,9 +1,8 @@
 # STATE — 接力棒（交接状态）
 
-> **任何 Agent 接手时的第一件事：读这一页。**
-> 本页回答"**现在到哪了**"，不回答"仓库是什么"（那是 [README.md](./README.md)）。
+> **接手第一件事：读这一页。** 本页只回答"**现在到哪了**"（仓库是什么见 [README.md](./README.md)）。
 >
-> **铁律**：每轮收尾必须更新本文件（不更新 = 本轮未完成）｜只写**当前**，历史归 [CHANGELOG.md](./CHANGELOG.md) 与 PR｜全文件 ≤ 50 行｜**坏消息优先写**
+> **铁律**：每轮收尾必须更新本文件（不更新 = 本轮未完成）｜只写**当前**，历史归 [CHANGELOG.md](./CHANGELOG.md) 与 PR｜≤ 50 行｜**坏消息优先写**
 
 **更新时间**：2026-10-17 19:25 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
 **上一手**：DSH（2026-10-17，一行安装 + v0.3.0 发布，PR [#3](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/3) 已合并）
@@ -20,7 +19,6 @@
 - 一行安装已上线：`install.sh`（curl）+ `install.ps1`（irm）；自动检测 `~/.dsh` / `~/.claude` / `~/.codex` / `~/.cursor`；`--project` 铺模板（默认不覆盖，重复安装先备份）
 - 发布后实测：PowerShell skill 安装 / project 模式 ✅；WSL bash 用 `main` raw 脚本安装 ✅（均落在 `main`）
 - 配套：`.gitattributes`（`*.sh` LF）+ `verify.sh` 容忍 CRLF frontmatter；README「快速开始」已改为一行安装
-- 本轮：只更新 STATE（v0.3.0 已发布/已验证），不改代码
 
 ## ⏭️ 下一步（接手第一件事）
 
@@ -36,8 +34,7 @@
 
 - ⚠️ **Windows 检出 + WSL 跑 bash**：`core.autocrlf=true` 会让 `.sh` 变 CRLF，`set -o pipefail` 直接报错；`.gitattributes` 已固定 `*.sh` 为 LF，别删
 - ⚠️ **SKILL.md 的 frontmatter 可能是 CRLF**：`head -1 | grep '^---$'` 会误判；验收已加 `tr -d '\r'`
-- ⚠️ **GitHub raw 国内可能慢**：脚本支持 `https_proxy` / `AI_CONSTITUTION_TARBALL_URL` / `--source`；别把网络失败当脚本逻辑问题
-- ⚠️ `AGENTS.md` 同名陷阱、`templates/` 点目录、文档坏链——仍适用（见 AGENTS.md）
+- ⚠️ **GitHub raw 国内可能慢**：脚本支持 `https_proxy` / `AI_CONSTITUTION_TARBALL_URL` / `--source`；另注意 `AGENTS.md` 同名陷阱、`templates/` 点目录、文档坏链（见 AGENTS.md）
 
 ## ✅ 验收
 
@@ -47,8 +44,7 @@
 
 ## 📌 接手自检（逐条确认，缺项先补齐再动手）
 
-- [ ] "更新时间 / 更新者"是**上一手**留下的，不是我自己刚写的
-- [ ] 我准备改的文件与"进度光标"一致（没有别人正在改同一处）
+- [ ] "更新时间 / 更新者"是上一手留下的；要改的文件与"进度光标"一致（没有别人正在改同一处）
 - [ ] `git log` / `git status` 与"分支 / PR"一致，**无来历不明的未提交改动**
 - [ ] 验收命令我**亲自跑过**，结果与"最近一次"一致
 - [ ] STATE 与仓库实际不一致时：**以仓库为准**，先更新 STATE 再动手
