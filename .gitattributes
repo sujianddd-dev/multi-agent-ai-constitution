@@ -1,0 +1,6 @@
+# Shell scripts must stay LF: CRLF breaks `set -o pipefail` and heredocs under
+# WSL / Linux (seen with `bash scripts/verify.sh` on a Windows checkout).
+*.sh text eol=lf
+
+# PowerShell accepts both line endings; keep the checkout native on Windows.
+*.ps1 text eol=crlf
