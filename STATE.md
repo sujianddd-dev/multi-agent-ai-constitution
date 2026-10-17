@@ -19,7 +19,7 @@
 - 已完成：`install.sh`（curl 一行）+ `install.ps1`（irm 一行）；自动检测 `~/.dsh` / `~/.claude` / `~/.codex` / `~/.cursor`，`--project` 铺模板（默认不覆盖，重复安装先备份）
 - 已完成：`.gitattributes`（`*.sh` 强制 LF）+ `verify.sh` 容忍 CRLF frontmatter；README「快速开始」改为一行安装（手动/离线折叠保留）
 - 已完成：`CHANGELOG.md` 0.3.0 增补一行安装条目（发布日改为 2026-10-17）
-- 本分支：`feat/one-line-install`（PR 待创建/待补链接）
+- 本分支：`feat/one-line-install`（PR [#3](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/3)，待合并）
 - 本地实测：WSL `bash install.sh --source . --dir/--project` 通过；Windows `pwsh -File install.ps1` 通过；`bash scripts/verify.sh` → **5/5**
 
 ## ⏭️ 下一步（接手第一件事）
