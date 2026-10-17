@@ -3,10 +3,12 @@
 本项目所有显著变更将记录于此。
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/)，版本号遵循 [SemVer](https://semver.org/lang/zh-CN/)。
 
-## [0.3.0] - 2026-09-17
+## [0.3.0] - 2026-10-17
 
 ### 新增（Added）
 
+- **一行安装** `install.sh` / `install.ps1` —— 自动检测 DSH / Claude Code / Codex / Cursor 的 skills 目录并安装；`--project` 可直接把模板铺进现有项目（默认不覆盖已有文件）；重复安装会先把旧版本备份为 `*.bak-<时间>`。
+- **`.gitattributes`** —— 强制 `*.sh` 使用 LF，修掉 Windows 检出后在 WSL/Linux 下 `bash scripts/verify.sh` 因 CRLF 报 `set: pipefail` 的问题；验收脚本同时容忍 SKILL.md 的 CRLF frontmatter。
 - **工程信条** `docs/DOCTRINE.md` —— 把散落的工程判断固化为**可执行总则**（不是口号，每条都有落地落点与反模式）：
   - 总纲：软件 = **协议优先的微服务 + 灵活聚合的表现层**（解耦 = 控制上下文；聚合 = 用好 token 的灵活性）
   - §1 不回到**重型前置规划**（计划只做到下一个可验证增量）

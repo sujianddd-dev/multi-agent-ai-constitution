@@ -37,7 +37,7 @@ fi
 
 echo "== 2/5 SKILL.md frontmatter =="
 SKILL="ai-constitution.skill/SKILL.md"
-if [ -s "$SKILL" ] && head -1 "$SKILL" | grep -q '^---$' && grep -qE '^name: ' "$SKILL"; then
+if [ -s "$SKILL" ] && head -1 "$SKILL" | tr -d '\r' | grep -q '^---$' && grep -qE '^name: ' "$SKILL"; then
   ok "frontmatter 起始 + name"
 else
   bad "SKILL.md 缺 frontmatter 或 name"

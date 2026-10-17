@@ -31,7 +31,30 @@
 
 > 为什么需要交接层：静态宪法回答"这是什么"，回答不了"**现在到哪了**"——而后者才是换 Agent 时真正会丢的东西。
 
-## 快速开始
+## ⚡ 快速开始（一行安装）
+
+**macOS / Linux / WSL**
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/sujianddd-dev/multi-agent-ai-constitution/main/install.sh | bash
+```
+
+**Windows PowerShell**
+
+```powershell
+irm https://raw.githubusercontent.com/sujianddd-dev/multi-agent-ai-constitution/main/install.ps1 | iex
+```
+
+脚本会自动检测本机已有的 Agent 目录，把 skill 安装到 `~/.dsh/skills/`、`~/.claude/skills/`、`~/.codex/skills/`、`~/.cursor/skills/`（存在哪个装哪个；都没有则装到 `~/.dsh/skills/`）。重复安装会先把旧版本备份为 `*.bak-<时间>`。
+
+- **只装到指定目录**：`curl -fsSL .../install.sh | bash -s -- --dir ~/.claude/skills/ai-constitution`
+- **只想把模板铺进当前项目**（不装 skill）：`curl -fsSL .../install.sh | bash -s -- --project .`
+- **Windows 项目模式**：`$env:AI_CONSTITUTION_PROJECT='.'; irm .../install.ps1 | iex`
+
+安装后对 Agent 说：**「用 ai-constitution 给这个项目建一套宪法」**。
+
+<details>
+<summary>手动安装 / 离线（不跑脚本）</summary>
 
 ```bash
 # 1. 复制模板到你的项目（模板目录 = 分发后的布局；`/.` 会带上 .github/ 等点目录）
@@ -43,6 +66,8 @@ cp -r ai-constitution.skill/templates/. <你的项目>/
 # 5. 提交并推送 GitHub
 git init && git add -A && git commit -m "docs: 建立 AI 宪法（共享知识库）"
 ```
+
+</details>
 
 之后任何 Agent 克隆仓库、读到 `AGENTS.md`，即自动进入"先读宪法 → **读 STATE 接手进度** → 动手 → 提 PR（交接五问）→ 等待审批"的协作循环。
 
