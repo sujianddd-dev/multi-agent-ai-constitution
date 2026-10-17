@@ -7,6 +7,8 @@ description: 为任意项目生成"多 Agent AI 宪法"共享知识库（README 
 
 > 核心思想：**用文档作为约束和协调机制** —— 所有 Agent 按同一份"剧本"行动，无需互相通信。
 > 这个方案 = 编程的"版本控制" + AI 的"思想统一"。
+>
+> 本 skill 以**独立目录**分发：`SKILL.md` 在根，`templates/` 与它同级；不依赖仓库路径。
 
 ## 何时使用
 
@@ -18,8 +20,12 @@ description: 为任意项目生成"多 Agent AI 宪法"共享知识库（README 
 
 1. 把模板复制到目标项目（**一条命令**；`/.` 会把 `.github/` 等点目录一并带入）：
    ```bash
-   cp -r ai-constitution.skill/templates/. <你的项目>/
+   # 本 skill 的安装目录：SKILL.md 与 templates/ 同级
+   # 独立包常见位置：~/.dsh/skills/ai-constitution 或 ~/.claude/skills/ai-constitution
+   SKILL_DIR="<本 skill 目录>"
+   cp -r "$SKILL_DIR/templates/." <你的项目>/
    ```
+   > 如果你直接用仓库源码，`SKILL_DIR` 就是仓库里的 `ai-constitution.skill/`。
    - **模板目录 = 分发后的布局**（结构即真实，不再需要"复制后手工归位"）：
      - 项目根：`AGENTS.md`、`CLAUDE.md`、`README.md`、`STATE.md`、`ARCHITECTURE.md`、`AGENT_GUIDELINES.md`、`API_CONTRACT.md`、`CODING_STANDARDS.md`、`DECISION_LOG.md`、`RISK_PLAYBOOK.md`
      - `.github/`：`CONTEXT.md`（项目上下文）、`PULL_REQUEST_TEMPLATE.md`（交接单，GitHub 自动套用到新 PR）

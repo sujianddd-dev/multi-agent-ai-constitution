@@ -53,6 +53,10 @@ irm https://raw.githubusercontent.com/sujianddd-dev/multi-agent-ai-constitution/
 
 安装后对 Agent 说：**「用 ai-constitution 给这个项目建一套宪法」**。
 
+**下载独立 skill 包（zip）**：从 [Releases](https://github.com/sujianddd-dev/multi-agent-ai-constitution/releases/latest) 下载 `ai-constitution-skill-v*.zip`。zip 根目录就是 `SKILL.md` + `templates/`，可直接上传 Agensi 或手动解压——这也是给其他 Agent 工具分发的标准包。
+
+> 本 skill **永久免费、MIT**，不设付费版。
+
 <details>
 <summary>手动安装 / 离线（不跑脚本）</summary>
 

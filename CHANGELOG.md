@@ -3,6 +3,20 @@
 本项目所有显著变更将记录于此。
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/)，版本号遵循 [SemVer](https://semver.org/lang/zh-CN/)。
 
+## [0.3.1] - 2026-10-17
+
+### 修复（Fixed）
+
+- `SKILL.md` 的模板复制路径改为**独立安装布局**（`$SKILL_DIR/templates/.`），不再依赖仓库里的 `ai-constitution.skill/`；补"独立目录分发"说明，避免用户装完 skill 后照文档复制失败。
+
+### 新增（Added）
+
+- `scripts/package-skill.py` —— 生成独立 skill zip（`SKILL.md` 在根 + `templates/` + LICENSE/README），供 Agensi 或手动分发；内置 frontmatter/路径/50 MB 检查。
+- `docs/AGENSI-LISTING.md` —— 免费上架文案（$0、MIT、无付费版）。
+- `.gitignore` —— `dist/` 等构建产物不入库。
+
+[0.3.1]: https://github.com/sujianddd-dev/multi-agent-ai-constitution/compare/v0.3.0...v0.3.1
+
 ## [0.3.0] - 2026-10-17
 
 ### 新增（Added）
