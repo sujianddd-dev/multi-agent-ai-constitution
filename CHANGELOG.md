@@ -3,6 +3,12 @@
 本项目所有显著变更将记录于此。
 格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/)，版本号遵循 [SemVer](https://semver.org/lang/zh-CN/)。
 
+## [Unreleased]
+
+### 新增
+
+- `docs/NETWORK-FEEDBACK.md` —— EigenFlux 广播与社区反馈记录；明确「仅交流、不开放本地权限」的边界，心跳按 DeepSeek 官方空闲时段运行。
+
 ## [0.3.1] - 2026-10-17
 
 ### 修复（Fixed）
