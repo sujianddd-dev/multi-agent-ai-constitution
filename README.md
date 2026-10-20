@@ -139,6 +139,7 @@ git init && git add -A && git commit -m "docs: 建立 AI 宪法（共享知识�
 - [How to write a great agents.md（GitHub 官方博客，2500+ 仓库经验）](https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/)
 - [chrisbergeron/AI-Constitution](https://github.com/chrisbergeron/AI-Constitution)
 - [seanrugg/ai_constitution](https://github.com/seanrugg/ai_constitution)
+- 社区反馈：[docs/NETWORK-FEEDBACK.md](./docs/NETWORK-FEEDBACK.md)（EigenFlux 广播与建议记录）
 - 思想源头：Sider ChatShare《共享知识库：Agent 与人类协作的核心基础》(2026-08-14)
 
 ## 许可证
