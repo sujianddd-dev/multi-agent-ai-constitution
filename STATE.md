@@ -4,13 +4,13 @@
 >
 > **铁律**：每轮收尾必须更新本文件（不更新 = 本轮未完成）｜只写**当前**，历史归 [CHANGELOG.md](./CHANGELOG.md) 与 PR｜≤ 50 行｜**坏消息优先写**
 
-**更新时间**：2026-10-22 00:55 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
-**上一手**：DSH（2026-10-17，v0.3.1 独立包发布，PR [#6](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/6) 已合并）
+**更新时间**：2026-10-22 01:10 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
+**上一手**：DSH（2026-10-22，记忆调研 PR [#9](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/9) 已合并；本 PR 补交接证据）
 
 ## 🎯 当前任务（一次只写一个）
 
-- **目标**：完成多智能体记忆系统调研（GitHub / 论文 / EigenFlux），判断哪些可复用、哪些必须自建；同时把「四证据点」补进 PR 交接单模板
-- **依据**：人类 2026-10-22 指令；设计稿 `多智能体记忆系统设计方案.md`；GitHub API + 论文 + EigenFlux 公开广播
+- **目标**：把「四证据点」补进 PR 交接单模板（输入来源/版本、交付物路径、执行回执、检查结果；缺项标 `pending-review`）；记忆调研已完成（PR #9）
+- **依据**：人类 2026-10-22「需要」；`docs/MEMORY-SYSTEMS-RESEARCH.md`；GitHub / 论文 / EigenFlux 公开来源
 - **边界**：**仅交流**。不向任何外部 Agent 开放本机文件、shell、凭据、MCP 或远程访问；自动发布/自动私信回复/高价值自动回复均关闭
 
 ## 📍 进度光标
@@ -18,12 +18,12 @@
 - EigenFlux CLI **0.6.8** 已装（用户级）；身份/资料/邮箱已在 Console 完成；Agent 名 **DSH**
 - 心跳触发器：`EigenFlux 网络收件箱`，时区 Asia/Shanghai，cron `0 0-8/2 * * *`（每天 00:00/02:00/04:00/06:00/08:00）
 - 广播已发布：EigenFlux item `370848836651843584`（`demand`，14 天有效；22 次阅读 / 6 个赞 / 0 条文字回复，截至 2026-10-22 00:00）
-- 记录文档：`docs/NETWORK-FEEDBACK.md`（发布原文、边界、网络观察、反馈表、心跳节奏）；记忆调研：`docs/MEMORY-SYSTEMS-RESEARCH.md`（GitHub 方案对比、论文/基准、EigenFlux 信号、复用建议；PR 待合并）
+- 记录文档：`docs/NETWORK-FEEDBACK.md`（发布原文、边界、网络观察、反馈表、心跳节奏）；记忆调研：`docs/MEMORY-SYSTEMS-RESEARCH.md`（已合并 PR #9）；交接模板：`templates/.github/PULL_REQUEST_TEMPLATE.md` 已加四证据点（本 PR）
 - 本地约定：Home `~/.eigenflux-dsh/.eigenflux`；skills target 已注册到 `~/.agents/skills`（host `deepseek-harness`）
 
 ## ⏭️ 下一步（接手第一件事）
 
-1. 先做 PR 模板的「四证据点」：输入来源/版本、交付物路径、执行回执、检查结果；缺项标 `pending-review`
+1. 用新模板自检本 PR：四证据点是否齐全；缺项是否标 `pending-review`
 2. 在 DSH **测试 profile** 试装 MemOS 本地插件（或 deja-vu），两周 A/B；不要先写 Qdrant/mem0/网关
 3. 心跳继续收 EigenFlux 回复；实质反馈匿名追加到 `docs/NETWORK-FEEDBACK.md`
 
@@ -41,8 +41,8 @@
 ## ✅ 验收
 
 - **命令**：`bash scripts/verify.sh` → **5/5**；相对链接 0 broken；无个体项目名
-- **广播验收**：`eigenflux profile items` 能看到 item `370848836651843584`，发布原文与 `docs/NETWORK-FEEDBACK.md` 一致
-- **调度验收**：`schedule_list` 只有 1 个 EigenFlux 触发器，cron `0 0-8/2 * * *`，Asia/Shanghai
+- **模板验收**：`templates/.github/PULL_REQUEST_TEMPLATE.md` 含「四证据点」与 `pending-review` 规则
+- **广播/调度验收**：`eigenflux profile items` 能看到 item `370848836651843584`，原文与 `docs/NETWORK-FEEDBACK.md` 一致；`schedule_list` 只有 1 个 EigenFlux 触发器，cron `0 0-8/2 * * *`，Asia/Shanghai
 
 ## 📌 接手自检（逐条确认，缺项先补齐再动手）
 
