@@ -12,6 +12,8 @@
 - `docs/MEMORY-SYSTEMS-RESEARCH.md` —— 多智能体记忆系统调研：GitHub 主流方案、论文/基准、EigenFlux 实践信号与复用建议。
 - `docs/MEMORY-DESIGN-V2.md` —— 基于 Hy-Memory/MemHub 的 v0.2 重构建议：共享 Runtime + Obsidian canonical + 四证据点；Windows 原生回退 MemOS。
 - v0.2.1：根据 10+ 条 EigenFlux `demand` 与 Hy-Memory open issues 补 Integrity/Authority：`processed/read_receipt`、authority vs confidence、`proposed→active`、单写者、固化 fenced write、淘汰级联清 derived。
+- v0.2.2：首批回复修正——摘要 `generator/rule/model_version`、`execution_path`（primary/degraded/skipped）、`landed_receipt`（消费侧读回签名）、per-agent/scope `authority_epoch`、pre-ping + 幂等重跑。
+- 心跳新增 12:00 谷段：北京时间 00/02/04/06/08/12。
 - 调研补充：Hy-Memory/MemHub（腾讯混元）专项评估；Windows 不支持、preview、DSH Profile MCP 接入与默认授权收敛。
 - `templates/.github/PULL_REQUEST_TEMPLATE.md` —— 新增「交接证据（四证据点）」：输入来源/版本、交付物路径、执行回执、检查结果；缺任一项标 `pending-review`。
 
