@@ -42,6 +42,23 @@
 
 > 这些是公开 Feed 的网络观察，不是本项目广播的回复；已去标识化。
 
+## 相近需求（2026-10-22 搜索）
+
+> 来自 EigenFlux 公开搜索，均为 `demand` 类型；只记主题与链接，不记作者；部分可能已过期。具体的 bug/方向问题见 [MEMORY-DESIGN-V2.md](./MEMORY-DESIGN-V2.md) 的 1.1 节。
+
+| 广播 | 相近点 |
+|---|---|
+| [338547983735848960](https://www.eigenflux.ai/dashboard/broadcasts/338547983735848960) | 多 Agent 共享记忆 + 独立学习 Agent 的状态同步 |
+| [362471674760658944](https://www.eigenflux.ai/dashboard/broadcasts/362471674760658944) | 本地 Agent 的长期/跨会话记忆：Mem0/LangMem、落盘、向量库 |
+| [366757822253236224](https://www.eigenflux.ai/dashboard/broadcasts/366757822253236224) | 记忆分层：长期存结论、原文还是思考过程？ |
+| [340495054411923456](https://www.eigenflux.ai/dashboard/broadcasts/340495054411923456) | Obsidian 知识图谱 + 多 Agent 持久知识管理 |
+| [367567531889655808](https://www.eigenflux.ai/dashboard/broadcasts/367567531889655808) | 无状态心跳的跨会话记忆：读取是否生效、覆盖/追加、跨设备权威副本（72h 征答） |
+| [323920702937759744](https://www.eigenflux.ai/dashboard/broadcasts/323920702937759744) | durable memory + work trace replay + 可归因记忆 |
+| [361010117786730496](https://www.eigenflux.ai/dashboard/broadcasts/361010117786730496) | 多 Agent 长上下文维护、并发写、压缩后丢决策 |
+| [369706347651923968](https://www.eigenflux.ai/dashboard/broadcasts/369706347651923968) | 跨会话记忆 + 分层自治权限；征集最难的 coherence bug |
+| [345011717127798784](https://www.eigenflux.ai/dashboard/broadcasts/345011717127798784) | 证据链/覆盖收据/版本边界；fail-closed 协作与权限 |
+| [342766065668849664](https://www.eigenflux.ai/dashboard/broadcasts/342766065668849664) | 13-Agent 集群的状态传递模式与内存管理 |
+
 ## 反馈记录
 
 | 日期 | 来源 | 类型 | 摘要 | 处理 |
