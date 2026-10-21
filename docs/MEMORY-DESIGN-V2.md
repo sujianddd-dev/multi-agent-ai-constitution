@@ -1,6 +1,6 @@
 # 多智能体记忆系统设计方案 v0.2（重构建议）
 
-> **日期**：2026-10-22 ｜ **依据**：原设计稿 v0.1 + Hy-Memory / MemHub 调研 + GitHub/论文/EigenFlux 公开信号
+> **版本**：v0.2.2（2026-10-22，含首批回复修正） ｜ **依据**：原设计稿 v0.1 + Hy-Memory / MemHub 调研 + GitHub/论文/EigenFlux 公开信号 + 首批广播回复
 >
 > **一句话**：原设计不是“方向错了”，而是**把已经有人做好的东西又写了一遍**。v0.2 做减法：**一个共享记忆 Runtime + 一个人工 canonical 层 + 一个交接证据层**。
 
@@ -56,6 +56,20 @@
 
 **方向级结论**：问题不在“用哪个记忆库”，而在**记忆写入/固化/召回缺少权威回执与权限边界**。v0.2 必须先把这层补上，再谈接入哪个 Runtime。
 
+### 1.2 首批回复带来的修正（v0.2.2）
+
+> 2026-10-22 收到两条一线工程回复，均为真实踩坑；已抽象进设计。
+
+| 反馈的问题 | 设计修正 |
+|---|---|
+| 摘要生成后旧段原文被压缩；口径/模型版本变了无法重算 | 摘要必须带 `generator_version` / `rule_version` / `model_version`；版本变更后旧段标 `NOT_COMPARABLE` 并隔离，不覆盖 |
+| SQLite 向量库不可用时静默 fallback 到 JSON；召回质量变了但调用方无感知 | 每个 evidence point 记录 `execution_path`（`primary/degraded/skipped`）+ `degraded_reason`；降级必须显式进回执 |
+| 提交侧 `rc=0`/计数增加，但真实状态没落库（`processed != landed`） | 拆成 `processed_receipt`（提交侧）与 `landed_receipt`（消费侧读回签名）；提交计数只当导航 |
+| 长耗时阶段持 DB 连接，空闲被服务端静默断开，故障延迟出现 | 用前 pre-ping；任务幂等可重跑；不长期持有空闲连接 |
+| `authority_epoch` 若全局单调，会作废其他 Agent 的 `proposed` | `authority_epoch` 按 `(agent_id, scope)` 分片单调；跨 Agent 用 `authority_epoch_set`，不做全局计数器 |
+
+**v0.2.2 结论**：Integrity 不只是“有没有回执”，还要回答**哪条路径、哪个版本、谁读回、哪个 scope 的 authority**。
+
 ---
 
 ## 2. v0.2 架构
@@ -91,14 +105,14 @@
 ```
 
 > **横切层：Memory Integrity / Authority**（不存业务内容，只做约束）
-> 单写者 · append-only evidence · `processed_receipt` / `read_receipt` · `authority_epoch` · `proposed → active` 闸 · 使用前再验权 · 固化 = fenced write · `no-op` 合法 · 冲突 HOLD · 淘汰级联清 derived。
+> 单写者 · append-only evidence · `processed_receipt` / `landed_receipt` / `read_receipt` · `authority_epoch`（per agent/scope） · `execution_path` · `generator_version` · `proposed → active` 闸 · 使用前再验权 · 固化 = fenced write · `no-op` 合法 · 冲突 HOLD · 淘汰级联清 derived。
 
 ### 组件职责
 
 | 组件 | 职责 | 不做什么 |
 |---|---|---|
 | MemHub / Hy-Memory | 会话/编码轨迹导入、抽取、去重、冲突、检索、治理、Matters/Wiki | 不负责人工 Markdown 编辑与 Git |
-| Memory Integrity / Authority | 单写者、receipt、authority vs confidence、proposed→active、use-time auth、consolidation fence | 不存业务内容 |
+| Memory Integrity / Authority | 单写者、receipt、authority vs confidence、proposed→active、use-time auth、consolidation fence、`execution_path`、`generator_version`、`landed_receipt` | 不存业务内容 |
 | Obsidian | 人类可读 canonical、决策/项目知识、Git 版本；只收 `active` | 不做向量检索、不做自动抽取、不做多 Agent 并发 |
 | 四证据点 | 交接回执与验收 | 不替代记忆检索 |
 | 薄 Host 适配 | Windows ↔ WSL/Linux 的 MCP/stdio 桥（如需要） | 不实现存储/检索/抽取 |
@@ -132,7 +146,7 @@
 ### 只写这五样
 
 1. **Memory Contract**：来源、版本、trust/taint、scope、`evidence_id`、`supersedes`、`status`（`proposed/active/superseded/conflict`）、`authority` 与 `confidence` 分开。
-2. **Memory Integrity / Authority**：单写者、append-only evidence、`processed_receipt` / `read_receipt`、`authority_epoch`、`proposed→active` 闸、use-time auth、consolidation fenced write、`no-op`/HOLD。
+2. **Memory Integrity / Authority**：单写者、append-only evidence、`processed_receipt` / `landed_receipt` / `read_receipt`、`authority_epoch`（per agent/scope）、`authority_epoch_set`、`execution_path`、`generator_version`、`proposed→active` 闸、use-time auth、consolidation fenced write、`no-op`/HOLD、pre-ping + 幂等重跑。
 3. **Host 适配/策略**：Windows↔WSL 的 MCP 桥（如需要）、DSH Profile 授权收敛、跨 Agent 只读、导入 dry-run/quarantine。
 4. **Obsidian Curator Workflow**：inbox → 审阅 → canonical → Git；只存已确认知识；摘要必须 link `decision_id`。
 5. **Evaluation Harness**：CMB / LoCoMo / LongMemEval + 交接/冲突/撤销/并发/污染/召回归因场景。
@@ -175,7 +189,7 @@
 
 ---
 
-## 6. 需要人类拍板的 7 个问题
+## 6. 需要人类拍板的 8 个问题
 
 1. **Windows 是否必须原生？** 是 → 路线 B（MemOS）；否/可 WSL → 路线 A（MemHub）。
 2. **Obsidian + Git 是否硬需求？** 是 → 保留 canonical 层；否 → MemHub Matters/Wiki 可能足够。
@@ -184,13 +198,14 @@
 5. **默认授权**：DSH Profile 是否只给当前项目/来源，而不是 `all-apps` + 全部 Workspace？
 6. **是否允许模型推断直接 confirmed？** 建议默认不允许：只能 `proposed`，由 Curator/人类或明确策略提升。
 7. **authority 与 confidence 是否分开？** 建议必须分开；合并/固化不能继承权限，工具调用前按 action-relevant memories 再验权。
+8. **authority epoch 的 scope？** 建议按 `(agent_id, scope)` 分片单调；跨 Agent 用 `authority_epoch_set`；不要全局计数器，否则一个 Agent 的 epoch 推进会误伤其他 Agent 的 `proposed`。
 
 ---
 
 ## 7. 结论
 
 - **要重构，但不是重写**：把“四层 + 自建网关”收缩为“一个共享 Runtime + 一个 Obsidian canonical + 四证据点 + 一层 Integrity/Authority”。
-- **实际广播/Issue 暴露的问题比“选哪个库”更根本**：索引≠处理、静默失败、双写分叉、固化提权、摘要当事实底座、自动 confirmed、淘汰残留。v0.2.1 已把这些写进硬约束。
+- **实际广播/Issue/首批回复暴露的问题比“选哪个库”更根本**：索引≠处理、静默失败、双写分叉、固化提权、摘要当事实底座、自动 confirmed、淘汰残留、静默降级、`processed != landed`、全局 epoch 误伤。v0.2.2 已把这些写进硬约束。
 - **Hy-Memory/MemHub 是目前最接近你目标的方案**，但 Windows 不支持 + preview，不能直接当生产依赖。
 - **Windows 原生今天可落地的是 MemOS**；MemHub 值得在 WSL 做 2 周试点。
 - **无论选哪条**，都不要再自建 Qdrant/mem0/六类/网关；把精力放在 **Integrity/Authority + canonical 治理 + 交接证据 + 评测**。
