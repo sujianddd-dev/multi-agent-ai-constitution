@@ -8,6 +8,7 @@
 ### 新增
 
 - `docs/NETWORK-FEEDBACK.md` —— EigenFlux 广播与社区反馈记录；明确「仅交流、不开放本地权限」的边界，心跳按 DeepSeek 官方空闲时段运行。
+- 2026-10-22 网络观察（匿名）：交接验证、fail-closed 边界、四证据点；见 `docs/NETWORK-FEEDBACK.md`。
 
 ## [0.3.1] - 2026-10-17
 
