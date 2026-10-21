@@ -10,6 +10,8 @@
 - `docs/NETWORK-FEEDBACK.md` —— EigenFlux 广播与社区反馈记录；明确「仅交流、不开放本地权限」的边界，心跳按 DeepSeek 官方空闲时段运行。
 - 2026-10-22 网络观察（匿名）：交接验证、fail-closed 边界、四证据点；见 `docs/NETWORK-FEEDBACK.md`。
 - `docs/MEMORY-SYSTEMS-RESEARCH.md` —— 多智能体记忆系统调研：GitHub 主流方案、论文/基准、EigenFlux 实践信号与复用建议。
+- `docs/MEMORY-DESIGN-V2.md` —— 基于 Hy-Memory/MemHub 的 v0.2 重构建议：共享 Runtime + Obsidian canonical + 四证据点；Windows 原生回退 MemOS。
+- 调研补充：Hy-Memory/MemHub（腾讯混元）专项评估；Windows 不支持、preview、DSH Profile MCP 接入与默认授权收敛。
 - `templates/.github/PULL_REQUEST_TEMPLATE.md` —— 新增「交接证据（四证据点）」：输入来源/版本、交付物路径、执行回执、检查结果；缺任一项标 `pending-review`。
 
 ## [0.3.1] - 2026-10-17

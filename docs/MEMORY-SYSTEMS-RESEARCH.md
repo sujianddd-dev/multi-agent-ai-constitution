@@ -2,7 +2,7 @@
 
 > **调研日期**：2026-10-22 ｜ **范围**：一份本地「四层 + 一路由」记忆设计稿、GitHub 主流项目、EigenFlux 公开广播、近两年论文与基准
 >
-> **结论先行**：设计方向是对的，但**不要从零实现四层四库**。这个领域已经有 MemOS、MIRIX、Mem0、Letta、Zep/Graphiti、Cognee、Hindsight 等成熟组件；真正值得自己写的只有**薄的路由/权限/来源治理层**和**人类可读的 canonical 工作流**。
+> **结论先行（2026-10-22 修订）**：设计方向是对的，但**不要从零实现四层四库**。最直接的重叠是腾讯 **Hy-Memory / MemHub**：本地优先的共享记忆 Hub，已支持 DSH / Hermes / Pi；但 **Windows 不支持 + preview**。所以：**Windows 原生先用 MemOS；能接受 WSL/Linux 则优先试 MemHub**。无论哪条，都只写 **canonical 治理 + 权限/来源 + 交接证据 + 评测**。重构后的 v0.2 见 [MEMORY-DESIGN-V2.md](./MEMORY-DESIGN-V2.md)。
 
 ---
 
@@ -39,6 +39,7 @@
 |---|---:|---|---|---|---|
 | [mem0ai/mem0](https://github.com/mem0ai/mem0) | 67.6k | Apache-2.0 | 2026-10-21 | 语义事实抽取、合并、检索；有 graph 变体 | 设计稿已选它；可继续用 OSS 版 |
 | [vectorize-io/hindsight](https://github.com/vectorize-io/hindsight) | 52.3k | MIT | 2026-10-21 | retain / recall / reflect，强调“学习”和反馈 | 补设计稿缺的反馈/遗忘闭环 |
+| [Tencent-Hunyuan/Hy-Memory](https://github.com/Tencent-Hunyuan/Hy-Memory) | 1.1k | Apache-2.0* | 2026-10-21 | Hy-Memory 双系统记忆引擎 + MemHub 本地共享 Hub；DSH/Hermes/Pi 支持 | **最接近“各 Agent 共用一个记忆库”**；Windows 不支持，preview |
 | [letta-ai/letta](https://github.com/letta-ai/letta) | 25.2k | Apache-2.0 | 2026-10-18 | MemGPT 的工程化：core / archival / recall 分层 | 补 Working/Archival 分层；但它是 Agent 平台，较重 |
 | [getzep/graphiti](https://github.com/getzep/graphiti) | 32.1k | Apache-2.0 | 2026-10-21 | 时序知识图谱、实体关系、时间维度 | 替代“Entity + 时间”自建图谱 |
 | [topoteretes/cognee](https://github.com/topoteretes/cognee) | 32.6k | Apache-2.0 | 2026-10-21 | 记忆图谱、数据管线、长期记忆平台 | 替代自建抽取/图谱管线 |
@@ -54,19 +55,35 @@
 | [microsoft/autogen](https://github.com/microsoft/autogen) | 61.5k | CC-BY-4.0 | 2026-10-16 | 多 Agent 框架 | 记忆多靠外部集成（如 Mem0） |
 | [openai/openai-agents-python](https://github.com/openai/openai-agents-python) | 30.2k | MIT | 2026-10-20 | Agents SDK + Sessions | 会话记忆；不是跨 Agent 语义记忆 |
 
-### 2.1 最值得先看的四个
+> `*` Hy-Memory 的 LICENSE 是“Tencent 声明 + Apache-2.0 全文”，声明无额外限制；GitHub 检测为 Other。MemHub 的 LICENSE 需单独核对。
 
-1. **MemOS**：唯一明确提供 **DeepSeek Harness 本地插件**（Windows PowerShell 安装、SQLite + FTS5 + 向量、去重、L1/L2/L3、多 Agent 协作、Memory Viewer）的项目。它已经覆盖设计稿的“会话索引 + 语义 + 路由 + 生命周期”大半。
-2. **MIRIX**：六类记忆 + 多 Agent 协调，和设计稿的 6 类几乎同构；论文报 LOCOMO 85.4%，本地 Postgres，适合做“分类与多 Agent 协调”的参考实现。
-3. **Hindsight**：强调“学习而不只是记住”，有 retain/recall/reflect 和反馈闭环；补设计稿缺的遗忘与反思。
-4. **basic-memory**：Markdown + MCP，最接近“Obsidian canonical”的现成实现；但 **AGPL-3.0**，嵌入前要评估许可证。
+### 2.1 最值得先看的五个
+
+1. **Hy-Memory / MemHub**：最接近“电脑里各个 Agent 共用一个记忆库”。MemHub 是本地优先共享 Hub，支持 DSH / Hermes / Pi / Claude Code / Cursor / Codex / OpenCode / Qwen Code；Hy-Memory 提供 8 层 Chat + Working/Coding 两层 + 版本演化链。**但 Windows 不支持、preview**；详见 2.3。
+2. **MemOS**：明确提供 **DeepSeek Harness 本地插件**（Windows PowerShell 安装、SQLite + FTS5 + 向量、去重、L1/L2/L3、多 Agent 协作、Memory Viewer）。Windows 原生今天最稳的“整包”候选。
+3. **MIRIX**：六类记忆 + 多 Agent 协调，和设计稿的 6 类几乎同构；论文报 LOCOMO 85.4%，本地 Postgres，适合做“分类与多 Agent 协调”的参考实现。
+4. **Hindsight**：强调“学习而不只是记住”，有 retain/recall/reflect 和反馈闭环；补设计稿缺的遗忘与反思。
+5. **basic-memory**：Markdown + MCP，最接近“Obsidian canonical”的现成实现；但 **AGPL-3.0**，嵌入前要评估许可证。
 
 ### 2.2 许可证与成熟度提醒
 
+- **Hy-Memory**：LICENSE 是“Tencent 声明 + Apache-2.0 全文”，声明无额外限制；GitHub 检测为 **Other**。MemHub 的 LICENSE 需单独核对。
 - **TencentDB-Agent-Memory**：README 标 MIT，但 GitHub License 检测为 **Other**；商用/嵌入前必须读 LICENSE。
 - **Memori**：License 检测为 **Other**，不适合直接当核心依赖。
 - **basic-memory**：**AGPL-3.0**；若修改并通过网络提供服务，可能触发 copyleft 义务。
 - **Star 通胀**：2026 年出现大量高 Star 的“agent memory”仓库，部分是新项目/营销驱动；不要只看 Star，至少看论文、release、最近 commit、issue 响应和独立复现。
+
+### 2.3 Hy-Memory / MemHub 专项评估
+
+- **Hy-Memory**：腾讯混元 2026-10-15 开源，`hy-memory==2.0.4` Python SDK；Chat 8 层（L0–L7）、Working/Coding 两层（facts + experiences）、Coding 版本演化链；ChromaDB/Qdrant/FAISS + Kuzu/Neo4j + SQLite；OpenAI 兼容 LLM/Embedding，可直接接 DeepSeek。
+- **MemHub**：本地优先共享记忆 Hub；把 DSH、Hermes、Pi、Claude Code、Cursor、Codex、OpenCode、Qwen Code 的会话/编码轨迹汇总到**一份本地记忆**；链路是 `Evidence → Hy Memory → Governance → Matters/Wiki`；Python Core 是唯一业务数据写入者。
+- **DSH 接入**：Profile 级 MCP Patch（`@deepseek-ai/dsh-mcp-client`）；Core 扫描 `$DSH_HOME/sessions`；**没有 Skill、没有 Capture Hook、没有 Prefetch**。
+- **权限模型**：Source grant / Harness sync / Model-content egress / Host recall 四个独立授权；不做屏幕/OCR/键鼠/剪贴板/后台录音。
+- **硬约束**：
+  1. **Windows 不支持**：v1.0.4 只发 Linux x64/arm64 与 macOS arm64/x64。
+  2. **很新**：2026-10-15 开源，v1.0.4，preview，45 个 open issues，1.1k stars；不是成熟生产依赖。
+  3. **默认授权偏宽**：DSH Profile 安装默认可能含 `all-apps` + 全部 Source/Workspace；官方文档自己提示复核。
+- **结论**：它直接覆盖原设计的“共享 Hub + 路由 + 权限 + 来源 + 冲突 + 六类”大半。**若接受 WSL/Linux，优先试 MemHub；Windows 原生用 MemOS 过渡。**
 
 ---
 
@@ -119,6 +136,7 @@
 | DSH 跨会话记忆插件 `dsh-mneme`（SQLite/Markdown、MIT） | [链接](https://www.eigenflux.ai/dashboard/broadcasts/346444836586389504) | DSH 生态已有轻量实现，先评估复用 |
 | Hivemind：执行轨迹 → 可复用技能 | [链接](https://www.eigenflux.ai/dashboard/broadcasts/324585133497647104) | Procedural Memory 可从 trace 自动沉淀，不必手写 |
 | PLACE：生命周期状态 + 查询时资格治理 | [链接](https://www.eigenflux.ai/dashboard/broadcasts/370786317249806336) | “记忆是否可用”是治理问题，不只是检索问题 |
+| 腾讯混元 Hy Memory 2.0：模型 + 框架 + MemHub 三层开源 | [链接](https://www.eigenflux.ai/dashboard/broadcasts/369425117203136512) | 共享 Hub 已有产品化尝试；先评估，不重复造 |
 
 **EigenFlux 的结论**：这个网络里已经有不少记忆系统实践者，讨论集中在**来源可信、并发一致性、生命周期治理、评测**，而不是“再做一个向量库”。设计稿如果只增加一层 Qdrant + 自建网关，会和这些实践脱节。
 
@@ -140,7 +158,24 @@
 
 ### 6.1 推荐组合（按优先级）
 
-**方案 A（首选，最少自建）**
+**方案 0（若 WSL/Linux 可接受，最接近目标）**
+
+```text
+Windows Hosts（DSH / Hermes / Pi）
+      │ MCP / stdio（DSH 走 Profile 级 Patch）
+      ▼
+MemHub Runtime（WSL2 / Linux）+ Hy-Memory
+      ├── Evidence → Hy Memory → Governance → Matters/Wiki
+      ├── Chroma/Qdrant/FAISS + Kuzu/Neo4j + SQLite（单写者）
+      └── 可选：Obsidian Vault（人工 canonical / Git 导出）
+```
+
+- **MemHub 是共享 Hub**：DSH 用 Profile 级 MCP Patch；Hermes/Pi 有官方 harness-support 文档；Core 扫描 DSH/Hermes/Pi 会话。
+- **Hy-Memory 是引擎**：Chat 8 层、Working/Coding 两层 + 版本演化链；不需要自建 Qdrant/mem0/六类。
+- **Windows 不支持**：v1.0.4 只发 Linux/macOS；Windows Host 需要把 MCP command 指向 WSL（薄桥，非官方路径）。
+- **Obsidian**：如果“人类可读 + Git canonical”是硬需求就保留；否则 MemHub 的 Matters/Wiki 可能足够。
+
+**方案 A（Windows 原生，最少自建）**
 
 ```text
 DSH / Hermes / ... 
@@ -152,7 +187,7 @@ DSH / Hermes / ...
       └── 可选: Mem0 OSS（只放稳定偏好/事实）
 ```
 
-- **MemOS 本地插件**已支持 DSH（Windows PowerShell 安装）、100% 本地、SQLite、混合检索、去重、L1/L2/L3、多 Agent 协作、Memory Viewer。先用它跑 MVP，不要先写 Qdrant 管线。
+- **MemOS 本地插件**已支持 DSH（Windows PowerShell 安装）、100% 本地、SQLite、混合检索、去重、L1/L2/L3、多 Agent 协作、Memory Viewer。Windows 原生先用它跑 MVP。
 - **Obsidian** 保留为 canonical；Agent 只写 `00-inbox/<agent>/`，Curator 提升到 `10-projects/`、`20-decisions/`、`50-skills/`。
 - **Mem0 OSS** 只在 MemOS 的语义抽取不满足时补充；不要同时让 Mem0 和 MemOS 都做“事实抽取”，否则又会多一个事实源。
 - **薄 Gateway** 只暴露 `memory_search` / `memory_write` / `memory_promote` / `memory_deprecate` / `memory_forget`，内部转调 MemOS/Obsidian/Mem0；不实现存储、不实现 embedding。
@@ -201,11 +236,11 @@ Obsidian / basic-memory（canonical）
 | 阶段 | 做什么 | 验收 |
 |---|---|---|
 | Day 1–2 | 写 Memory Contract + 威胁模型；选 3 个场景（交接/冲突/撤销）；确定评测指标 | schema 评审通过；场景可复现 |
-| Day 3–5 | 在 DSH **测试 profile** 安装 MemOS 本地插件；导入最近 2 周会话；保留 Obsidian Vault | 检索可用；P95、token、召回有基线 |
+| Day 3–5 | Windows 原生：在 DSH **测试 profile** 安装 MemOS 本地插件；或 WSL：试 MemHub/Hy-Memory；导入最近 2 周会话；保留 Obsidian Vault | 检索可用；P95、token、召回有基线 |
 | Day 6–8 | Obsidian + basic-memory/MCP（或自带 Markdown MCP）；inbox/canonical；provenance 字段 | Agent 只能写 inbox；canonical 有来源/版本 |
 | Day 9–10 | Mem0 OSS（仅当 MemOS 语义层不足）；namespace 与跨 Agent 只读 | 不产生第二个事实源 |
 | Day 11–12 | 薄 Gateway（MCP）：search/write/promote/deprecate/forget；权限与冲突 | 四个证据点可追溯 |
-| Day 13–14 | 跑 LoCoMo/LongMemEval 子集 + 自己的场景；A/B：MemOS vs 自建 | 有数据再决定是否继续自建 |
+| Day 13–14 | 跑 LoCoMo/LongMemEval 子集 + 自己的场景；A/B：MemOS vs MemHub vs 自建 | 有数据再决定是否继续自建 |
 
 **先不要做**：全量导入几百 MB 历史会话、其余 Agent 全接入、Qdrant 自建集群、复杂图谱 UI。先把 DSH + Hermes 两个 Agent 跑通。
 
@@ -214,26 +249,26 @@ Obsidian / basic-memory（canonical）
 ## 8. 关键决策（需要人类拍板）
 
 1. **本地优先还是允许云**：MemOS 本地 / Mem0 OSS / Hindsight 本地 vs 云服务；原始会话是否允许离开本机？
-2. **主记忆 OS 选谁**：MemOS（DSH 支持最好）vs MIRIX（六类/多模态）vs Letta（Agent 平台）？
+2. **主记忆 OS 选谁**：MemHub（WSL/Linux，共享 Hub）vs MemOS（Windows 原生）vs MIRIX（六类/多模态）vs Letta（Agent 平台）？
 3. **Episodic 存储**：MemOS SQLite vs deja-vu vs Graphiti？建议先用 MemOS/deja-vu，不要先上 Qdrant。
 4. **Canonical 格式**：Obsidian Vault + Git 是否必须？如果是，basic-memory 只做 MCP 适配，不替代 Vault。
-5. **许可证**：basic-memory（AGPL）、TencentDB/Memori（Other）是否能接受？不能就排除。
-6. **范围**：先 DSH + Hermes，还是一次性接四个 Agent？建议前者。
+5. **许可证**：basic-memory（AGPL）、TencentDB/Memori（Other）、Hy-Memory（自定义 Apache-2.0 头，GitHub 显示 Other）是否能接受？不能就排除。
+6. **Windows 是否必须原生**：是 → MemOS；否/可 WSL → MemHub。范围先 DSH + Hermes，还是一次性接四个 Agent？建议前者。
 
 ---
 
 ## 9. 最终建议
 
-> **不要把“四层 + 一路由”当成新发明。** 它和 MIRIX 的六类、MemOS 的 Memory OS、TencentDB 的四类资产、Letta 的分层记忆高度重叠。你真正要建的是：
+> **不要把“四层 + 一路由”当成新发明。** 它和 Hy-Memory/MemHub 的共享 Hub、MIRIX 的六类、MemOS 的 Memory OS、TencentDB 的四类资产、Letta 的分层记忆高度重叠。你真正要建的是：
 
-1. **一个人类可读、可 Git 的 canonical 层**（Obsidian）；
-2. **一个薄的路由/权限/来源治理层**（MCP Gateway，不存数据）；
+1. **一个人类可读、可 Git 的 canonical 层**（Obsidian；如果这是硬需求）；
+2. **一个 Host 适配/授权收敛层**（Windows↔WSL 薄桥、DSH Profile 授权、跨 Agent 只读）；
 3. **一套可验证的交接证据**（输入版本、交付物、执行回执、检查结果）；
 4. **一套自己的多 Agent 评测场景**。
 
-其余全部复用：MemOS 做本地记忆 OS，Mem0 做语义事实，Graphiti/Cognee 做图谱（按需），basic-memory 做 Markdown/MCP（注意 AGPL），Hindsight 做反馈/遗忘（按需）。
+其余全部复用：**WSL/Linux 优先 MemHub + Hy-Memory**；**Windows 原生用 MemOS**；Mem0 做语义补充，Graphiti/Cognee 做图谱（按需），basic-memory 做 Markdown/MCP（注意 AGPL），Hindsight 做反馈/遗忘（按需）。
 
-**下一步**：先在 DSH 测试 profile 里试装 MemOS 本地插件，用两周做 A/B；如果它已经覆盖 80%，就把精力放在 Obsidian canonical + 薄 Gateway + 评测上，而不是重写一套 Qdrant/mem0/网关。
+**下一步**：如果接受 WSL，先在 WSL 试 MemHub（DSH Profile MCP + Hermes/Pi），用两周 A/B；否则先在 DSH 测试 profile 试 MemOS。两条路都只做测试 profile，不动生产。重构后的 v0.2 见 [MEMORY-DESIGN-V2.md](./MEMORY-DESIGN-V2.md)。
 
 ---
 
@@ -253,12 +288,16 @@ Obsidian / basic-memory（canonical）
 - [BMAM（ACL 2026 Findings）](https://aclanthology.org/2026.findings-acl.1973/)
 - [MemoryBench（arXiv:2510.17281）](https://arxiv.org/abs/2510.17281)
 - [Hindsight 论文（arXiv:2512.12818）](https://arxiv.org/abs/2512.12818)
+- [Memory Beyond Recall（EMNLP 2026，Hy-Memory）](https://arxiv.org/abs/2606.09483)
+- [Hy-Memory-30B-A3B 技术报告（arXiv:2610.22196）](https://arxiv.org/abs/2610.22196)
 
 ### 项目
 
 - [Mem0](https://github.com/mem0ai/mem0) ｜ [Hindsight](https://github.com/vectorize-io/hindsight) ｜ [Letta](https://github.com/letta-ai/letta)
 - [Graphiti](https://github.com/getzep/graphiti) ｜ [Cognee](https://github.com/topoteretes/cognee)
 - [MemOS](https://github.com/MemTensor/MemOS) ｜ [MIRIX](https://github.com/Mirix-AI/MIRIX)
+- [Hy-Memory](https://github.com/Tencent-Hunyuan/Hy-Memory) ｜ [MemHub](https://github.com/Tencent-Hunyuan/Hy-Memory/blob/main/memhub/README.md)
+- [DSH 接入说明](https://github.com/Tencent-Hunyuan/Hy-Memory/blob/main/memhub/docs/harness-support/deepseek-harness.md) ｜ [Harness 支持矩阵](https://github.com/Tencent-Hunyuan/Hy-Memory/blob/main/memhub/docs/harness-support/README.md)
 - [TencentDB Agent Memory](https://github.com/TencentCloud/TencentDB-Agent-Memory) ｜ [Memori](https://github.com/MemoriLabs/Memori)
 - [basic-memory](https://github.com/basicmachines-co/basic-memory) ｜ [LangMem](https://github.com/langchain-ai/langmem) ｜ [LangGraph](https://github.com/langchain-ai/langgraph)
 
@@ -269,6 +308,7 @@ Obsidian / basic-memory（canonical）
 - [memory provenance laundering](https://www.eigenflux.ai/dashboard/broadcasts/356289574164496384)
 - [同步回执作为时间基线](https://www.eigenflux.ai/dashboard/broadcasts/370022538165616640)
 - [多 Agent 身份/配置漂移与并发共享状态](https://www.eigenflux.ai/dashboard/broadcasts/359999804404662272)
+- [腾讯混元 Hy Memory 2.0 三层开源](https://www.eigenflux.ai/dashboard/broadcasts/369425117203136512)
 - [dsh-mneme：DSH 跨会话记忆插件](https://www.eigenflux.ai/dashboard/broadcasts/346444836586389504)
 
 > **调研限制**：未做 hands-on 基准；Star/License 为 2026-10-21 的 GitHub API 数据；论文与厂商数字未独立复现；EigenFlux 只读取公开广播，未使用任何私信或本地权限。选型前请用你自己的数据和场景复测。

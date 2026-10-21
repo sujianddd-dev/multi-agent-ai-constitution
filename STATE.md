@@ -4,13 +4,13 @@
 >
 > **铁律**：每轮收尾必须更新本文件（不更新 = 本轮未完成）｜只写**当前**，历史归 [CHANGELOG.md](./CHANGELOG.md) 与 PR｜≤ 50 行｜**坏消息优先写**
 
-**更新时间**：2026-10-22 01:10 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
-**上一手**：DSH（2026-10-22，记忆调研 PR [#9](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/9) 已合并；本 PR 补交接证据）
+**更新时间**：2026-10-22 02:10 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
+**上一手**：DSH（2026-10-22，记忆调研 PR [#9](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/9) + 交接证据 PR [#10](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/10) 已合并；本 PR 做 v0.2 重构）
 
 ## 🎯 当前任务（一次只写一个）
 
-- **目标**：把「四证据点」补进 PR 交接单模板（输入来源/版本、交付物路径、执行回执、检查结果；缺项标 `pending-review`）；记忆调研已完成（PR #9）
-- **依据**：人类 2026-10-22「需要」；`docs/MEMORY-SYSTEMS-RESEARCH.md`；GitHub / 论文 / EigenFlux 公开来源
+- **目标**：基于腾讯 Hy-Memory/MemHub 重构记忆方案 v0.2：共享 Runtime + Obsidian canonical + 四证据点；Windows 原生回退 MemOS
+- **依据**：人类 2026-10-22 指出漏掉 Hy-Memory；`docs/MEMORY-SYSTEMS-RESEARCH.md` + 官方 DSH/Hermes/Pi 支持文档 + GitHub/论文
 - **边界**：**仅交流**。不向任何外部 Agent 开放本机文件、shell、凭据、MCP 或远程访问；自动发布/自动私信回复/高价值自动回复均关闭
 
 ## 📍 进度光标
@@ -18,30 +18,30 @@
 - EigenFlux CLI **0.6.8** 已装（用户级）；身份/资料/邮箱已在 Console 完成；Agent 名 **DSH**
 - 心跳触发器：`EigenFlux 网络收件箱`，时区 Asia/Shanghai，cron `0 0-8/2 * * *`（每天 00:00/02:00/04:00/06:00/08:00）
 - 广播已发布：EigenFlux item `370848836651843584`（`demand`，14 天有效；22 次阅读 / 6 个赞 / 0 条文字回复，截至 2026-10-22 00:00）
-- 记录文档：`docs/NETWORK-FEEDBACK.md`（发布原文、边界、网络观察、反馈表、心跳节奏）；记忆调研：`docs/MEMORY-SYSTEMS-RESEARCH.md`（已合并 PR #9）；交接模板：`templates/.github/PULL_REQUEST_TEMPLATE.md` 已加四证据点（本 PR）
+- 记录文档：`docs/NETWORK-FEEDBACK.md`；记忆调研：`docs/MEMORY-SYSTEMS-RESEARCH.md` + [v0.2](./docs/MEMORY-DESIGN-V2.md)（本 PR）；交接模板四证据点已合并（PR #10）
 - 本地约定：Home `~/.eigenflux-dsh/.eigenflux`；skills target 已注册到 `~/.agents/skills`（host `deepseek-harness`）
 
 ## ⏭️ 下一步（接手第一件事）
 
-1. 用新模板自检本 PR：四证据点是否齐全；缺项是否标 `pending-review`
-2. 在 DSH **测试 profile** 试装 MemOS 本地插件（或 deja-vu），两周 A/B；不要先写 Qdrant/mem0/网关
+1. 选路线：WSL/Linux 试 **MemHub**（DSH Profile MCP + Hermes/Pi）；或 Windows 原生试 **MemOS**；只动测试 profile
+2. 按 v0.2 收敛：删自建 Qdrant/mem0/六类/网关；保留 Obsidian canonical + 四证据点 + 评测
 3. 心跳继续收 EigenFlux 回复；实质反馈匿名追加到 `docs/NETWORK-FEEDBACK.md`
 
 ## 🚧 阻塞 / 待人类拍板
 
-- 待人类拍板：记忆栈选型（MemOS 本地试点 vs 自建 Gateway）；广播仍 **0 条文字回复**。
+- 待人类拍板：**Windows 原生（MemOS）还是 WSL/Linux（MemHub）**；MemHub 目前 **Windows 不支持 + preview**；广播仍 **0 条文字回复**。
 
 ## 🕳️ 已知坑（踩过的，别再踩）
 
 - ⚠️ **DeepSeek 峰谷已改**：周一至周五 9:00–12:00、14:00–18:00 为高峰；其余（含周末/法定节假日）为空闲。旧「00:30–08:30 错峰」已失效，别按旧文章排班
 - ⚠️ **不得开放本地权限**：EigenFlux 只是通信层；不提供文件、shell、MCP、远程桌面、凭据或任何入站访问
 - ⚠️ **心跳 host**：provision 的 runtime host 是 `deepseek-harness`，需把 skills target 注册到 `~/.agents/skills`，否则 `heartbeat plan` 报 unknown host
-- ⚠️ `.sh` 必须 LF（`.gitattributes` 已锁）；⚠️ **Star 数 ≠ 成熟度**，License 要逐项核对（AGPL/Other 先排除）
+- ⚠️ `.sh` 必须 LF；⚠️ **Star 数 ≠ 成熟度**；**Hy-Memory/MemHub Windows 不支持 + preview**，License 逐项核对（AGPL/Other 先排除）
 
 ## ✅ 验收
 
 - **命令**：`bash scripts/verify.sh` → **5/5**；相对链接 0 broken；无个体项目名
-- **模板验收**：`templates/.github/PULL_REQUEST_TEMPLATE.md` 含「四证据点」与 `pending-review` 规则
+- **文档/模板验收**：`docs/MEMORY-DESIGN-V2.md` 存在；`docs/MEMORY-SYSTEMS-RESEARCH.md` 含 Hy-Memory/MemHub 专项与 Windows 限制；`templates/.github/PULL_REQUEST_TEMPLATE.md` 含四证据点与 `pending-review`
 - **广播/调度验收**：`eigenflux profile items` 能看到 item `370848836651843584`，原文与 `docs/NETWORK-FEEDBACK.md` 一致；`schedule_list` 只有 1 个 EigenFlux 触发器，cron `0 0-8/2 * * *`，Asia/Shanghai
 
 ## 📌 接手自检（逐条确认，缺项先补齐再动手）
