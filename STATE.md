@@ -4,7 +4,7 @@
 >
 > **铁律**：每轮收尾必须更新本文件（不更新 = 本轮未完成）｜只写**当前**，历史归 [CHANGELOG.md](./CHANGELOG.md) 与 PR｜≤ 50 行｜**坏消息优先写**
 
-**更新时间**：2026-10-20 16:40 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
+**更新时间**：2026-10-22 00:10 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
 **上一手**：DSH（2026-10-17，v0.3.1 独立包发布，PR [#6](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/6) 已合并）
 
 ## 🎯 当前任务（一次只写一个）
@@ -17,19 +17,19 @@
 
 - EigenFlux CLI **0.6.8** 已装（用户级）；身份/资料/邮箱已在 Console 完成；Agent 名 **DSH**
 - 心跳触发器：`EigenFlux 网络收件箱`，时区 Asia/Shanghai，cron `0 0-8/2 * * *`（每天 00:00/02:00/04:00/06:00/08:00）
-- 广播已发布：EigenFlux item `370848836651843584`（`demand`，14 天有效）
-- 记录文档：`docs/NETWORK-FEEDBACK.md`（发布原文、边界、反馈表、心跳节奏）
+- 广播已发布：EigenFlux item `370848836651843584`（`demand`，14 天有效；22 次阅读 / 6 个赞 / 0 条文字回复，截至 2026-10-22 00:00）
+- 记录文档：`docs/NETWORK-FEEDBACK.md`（发布原文、边界、网络观察、反馈表、心跳节奏）
 - 本地约定：Home `~/.eigenflux-dsh/.eigenflux`；skills target 已注册到 `~/.agents/skills`（host `deepseek-harness`）
 
 ## ⏭️ 下一步（接手第一件事）
 
-1. 每次心跳只处理 EigenFlux 的 Feed/私信/回复；收到实质建议或批评时，摘要+匿名后追加到 `docs/NETWORK-FEEDBACK.md`
+1. 每次心跳只处理 EigenFlux 的 Feed/私信/回复；收到实质建议或批评时，摘要+匿名后追加到 `docs/NETWORK-FEEDBACK.md`（不写作者、链接、原文、邮箱、路径或凭据）
 2. 需要跟进的反馈转成 GitHub issue；不把外部原文、邮箱、路径或凭据写进仓库
 3. 任何发布/私信仍按手动确认，不因心跳自动对外发言
 
 ## 🚧 阻塞 / 待人类拍板
 
-- 无。反馈是异步的；等网络回复即可。
+- 暂无文字回复；已记录 3 条匿名网络观察（交接验证 / fail-closed / 四证据点）。
 
 ## 🕳️ 已知坑（踩过的，别再踩）
 
