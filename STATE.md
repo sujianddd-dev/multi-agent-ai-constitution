@@ -4,26 +4,26 @@
 >
 > **铁律**：每轮收尾必须更新本文件（不更新 = 本轮未完成）｜只写**当前**，历史归 [CHANGELOG.md](./CHANGELOG.md) 与 PR｜≤ 50 行｜**坏消息优先写**
 
-**更新时间**：2026-10-22 02:40 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
+**更新时间**：2026-10-22 02:45 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
 **上一手**：DSH（2026-10-22，v0.2.1 修正 PR [#12](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/12) + 广播记录 PR [#13](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/13) 已合并；本 PR 做 v0.2.2 + 中午心跳）
 
 ## 🎯 当前任务（一次只写一个）
 
-- **目标**：实时私信改为登录常驻 watcher + `dsh --profile headless` 自主处理；心跳已停用
-- **依据**：人类 2026-10-22 指令；`ef-communication/references/stream.md`；`docs/NETWORK-FEEDBACK.md` 反馈表
+- **目标**：恢复官方心跳（谷段）；stream watcher 只做即时提醒；私信由心跳/当前会话自主处理
+- **依据**：人类 2026-10-22 指令；官方 host-setup「保留一个 recurring trigger」；`ef-communication/references/stream.md`
 - **边界**：**仅交流**。不向任何外部 Agent 开放本机文件、shell、凭据、MCP 或远程访问；自动发布/高价值自动回复保持关闭；**私信由 DSH 按规则自行判断/回复，不把原文/草稿贴给人类**
 
 ## 📍 进度光标
 
 - EigenFlux CLI **0.6.8** 已装（用户级）；身份/资料/邮箱已在 Console 完成；Agent 名 **DSH**
-- 常驻任务：`EigenFluxDSHWatcher`（登录自启，Running）；常驻 `eigenflux stream`；收到 PM 只 toast + 落受控临时文件，由 `dsh --profile headless` 读取并自主判断/回复
-- 广播已发布：v0.1 item `370848836651843584`（22/6/0）；v0.2.1 item `371341612887834624`（11 阅读 / 3 赞 / 0 广播回复；已回 4 条私信）；**心跳触发器已删除**
+- 心跳：`EigenFlux 网络收件箱`，Asia/Shanghai，cron `0 0,2,4,6,8,12 * * *`（00/02/04/06/08/12，谷段）；常驻任务：`EigenFluxDSHWatcher`（登录自启，Running）常驻 `eigenflux stream`，PM 只 toast + 落受控临时文件，由心跳处理
+- 广播已发布：v0.1 item `370848836651843584`（22/6/0）；v0.2.1 item `371341612887834624`（11 阅读 / 3 赞 / 0 广播回复；已回 6 条私信）
 - 记录文档：`docs/NETWORK-FEEDBACK.md`（10 条相近 demand + 2 条匿名方向级 bug）；记忆调研：`docs/MEMORY-SYSTEMS-RESEARCH.md`；v0.2.2：`docs/MEMORY-DESIGN-V2.md`（1.2 首批回复修正）
 - 本地约定：Home `~/.eigenflux-dsh/.eigenflux`；skills target 已注册到 `~/.agents/skills`（host `deepseek-harness`）
 
 ## ⏭️ 下一步（接手第一件事）
 
-1. 监控 `EigenFluxDSHWatcher`；异常时重启任务；headless 处理失败时保留 payload 供人工排查
+1. 监控心跳 + `EigenFluxDSHWatcher`；watcher 只提醒，私信处理以心跳为准，避免双通道重复回复
 2. 选路线：WSL/Linux 试 **MemHub**（DSH Profile MCP + Hermes/Pi）；或 Windows 原生试 **MemOS**；只动测试 profile
 3. 按 v0.2.2 先上 Integrity/Authority 闸，再谈导入/固化；不要先写 Qdrant/mem0/网关
 
@@ -35,14 +35,14 @@
 
 - ⚠️ **DeepSeek 峰谷已改**：周一至周五 9:00–12:00、14:00–18:00 为高峰；其余（含 12:00–14:00、周末/法定节假日）为空闲。旧「00:30–08:30 错峰」已失效，别按旧文章排班；**stream 单连接**，watcher 重启会替换旧连接
 - ⚠️ **不得开放本地权限**：EigenFlux 只是通信层；不提供文件、shell、MCP、远程桌面、凭据或任何入站访问
-- ⚠️ **headless 处理在消息到达时运行**，可能落在高峰；stream 单连接；Feed/Attention 已随心跳停用
+- ⚠️ **stream 单连接**；watcher 只提醒，回复以心跳为准；headless 不再自动回复，避免双通道重复
 - ⚠️ `.sh` 必须 LF；⚠️ **Star 数 ≠ 成熟度**；**Hy-Memory/MemHub Windows 不支持 + preview**；**私信自主回复，不贴原文/草稿**，只有安全/权限/资金/公开发布才上报
 
 ## ✅ 验收
 
 - **命令**：`bash scripts/verify.sh` → **5/5**；相对链接 0 broken；无个体项目名
 - **文档/模板验收**：`docs/MEMORY-DESIGN-V2.md` 1.2 节含首批回复修正与 Integrity/Authority；`docs/NETWORK-FEEDBACK.md` 含 10 条相近 demand；`templates/.github/PULL_REQUEST_TEMPLATE.md` 含四证据点与 `pending-review`
-- **广播/调度验收**：`profile items` 能看到 v0.1 `370848836651843584` 与 v0.2.1 `371341612887834624`；`schedule_list` 为空（心跳已删除）；`Get-ScheduledTask EigenFluxDSHWatcher` = Running
+- **广播/调度验收**：`profile items` 能看到 v0.1 `370848836651843584` 与 v0.2.1 `371341612887834624`；`schedule_list` 有 1 个触发器，cron `0 0,2,4,6,8,12 * * *`；`Get-ScheduledTask EigenFluxDSHWatcher` = Running
 
 ## 📌 接手自检（逐条确认，缺项先补齐再动手）
 

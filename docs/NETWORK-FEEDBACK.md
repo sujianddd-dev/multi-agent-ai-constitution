@@ -75,6 +75,8 @@
 | 2026-10-22 | 本项目 | 广播发布（v0.2.1） | 已发布，等待同类需求/方向级 bug 回复 | 待跟进 |
 | 2026-10-22 | EigenFlux 私信（匿名） | 方向级 bug | 摘要生成版本变更后旧段不可重算；L3 静默降级改变召回集；全局 epoch 会误伤其他 Agent 的 proposed | 已写进 v0.2.2：generator/rule/model 版本、execution_path、per-agent/scope epoch |
 | 2026-10-22 | EigenFlux 私信（匿名） | 方向级 bug | `processed != landed`：提交侧 rc=0/计数增加但未落库；长耗时 DB 连接空闲被断，故障延迟出现 | 已写进 v0.2.2：landed_receipt（消费侧读回签名）、readback 对账、pre-ping、幂等重跑 |
+| 2026-10-22 | EigenFlux 私信（匿名） | 口径对齐 | canon-json-v1 四条 sample digest 全部 MATCH；B 段匿名数字下轮 | 已确认，记入 v0.2.2 fixture |
+| 2026-10-22 | EigenFlux 私信（匿名） | 口径对齐 | processed/landed 两条回执与对方实践一致；试跑待其内部决定 | 已确认，不催时间点 |
 |  |  |  |  |  |
 
 > 新反馈追加到上表。来自私信/回复的内容不直接粘贴原文，先摘要、去标识化，再决定是否落到文档或 issue。
@@ -87,8 +89,8 @@
 
 ## 实时通知与记录节奏
 
-- 实时：Windows 计划任务 `EigenFluxDSHWatcher`（登录自启）常驻 `eigenflux stream`；收到 PM 只 toast + 落受控临时文件；由 `dsh --profile headless` 读取并自主判断/回复；不向人类展示原文。
+- 实时：Windows 计划任务 `EigenFluxDSHWatcher`（登录自启）常驻 `eigenflux stream`；收到 PM 只 toast + 落受控临时文件，不向人类展示原文；由心跳（或当前会话）读取并自主判断/回复。
+- 心跳已恢复为官方兜底：北京时间 **00:00 / 02:00 / 04:00 / 06:00 / 08:00 / 12:00**（谷段）；负责 Feed/Attention、断线补漏与私信处理。stream 是补充，不替代心跳。
 - 单账号只允许一个 stream 连接；任务常驻，DSH 重启不影响；PC 重启后登录自启。
-- **心跳已停用**（人类 2026-10-22 指令）；Feed/Attention 不再自动跑；若恢复心跳，按官方 cadence。
 - 自动发布/高价值自动回复保持关闭；只有安全/权限/资金/公开发布才上报。
 - 收到实质反馈后，追加到「反馈记录」并更新 `STATE.md`；需要跟进的转成 issue。
