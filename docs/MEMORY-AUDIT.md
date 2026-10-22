@@ -79,15 +79,23 @@
 - Obsidian **1.14.4** 已安装；vault `~/.dsh/memory-vault` 已打开，含 `agents/`、`shared/`、`inbox/`。
 - Desktop 的 11 个 `.md` 已**复制**到 `inbox/desktop-import/`；原文件未移动、未修改；`INDEX.md` 记录来源、vault 路径、SHA256 前 12 位、字节数。
 - 自动导入任务 `ObsidianDesktopImport`：登录时 + 每 10 分钟；VBS 隐藏启动；互斥锁防并发；按 sidecar hash 幂等；源文件变更时写带时间戳的新版本。
-- 边界：Obsidian 现在是 **canonical 查看/编辑层 + 实际写入目标**；`inbox/desktop-import` 是源材料，已通过 `excludeDirs: [archive, inbox]` 从记忆搜索/图谱排除，但仍在 Obsidian 可读。
+- 边界：Obsidian 现在是 **canonical 查看/编辑层 + 实际写入目标**；`inbox/desktop-import` 是源材料，`_meta/` 是说明/审计，均已通过 `excludeDirs: [archive, inbox, _meta]` 从记忆搜索/图谱排除，但仍在 Obsidian 可读。
 
 ### 5.3 启用与清理（2026-10-22）
 
 - `memory_runtime_info`：`vaultRoot=C:/Users/14040/.dsh/memory-vault`、`safeToWrite=true`、`gitRepository=true`。
-- 实测：`wiki_write` → `wiki_search` → `wiki_read` **PASS**；新增 `shared/notes/dsh-memory-activation.md`，vault git 已提交。
-- 清理边界：`inbox/desktop-import` 的 11 个源文档**不删除**，只从记忆索引/图谱排除；当前索引只有 README + activation 两条。
-- `wiki_graph_audit`：`complete=true`、`excludedDirsApplied=[archive,inbox]`、`archiveNodesInIndex=0`。
-- 已把“无用/来源类记忆”的审计交给子代理；审计只读、不删除源文件，报告仍在生成。
+- 实测：`wiki_write` → `wiki_search` → `wiki_read` **PASS**；新增 `shared/notes/dsh-memory-activation.md`（带 frontmatter，git 已提交）。
+- 子代理清理审计完成（`_meta/CLEANUP-AUDIT.md`）：
+  - 14 个 `.md`：1 条 curated note + README + 11 个导入源 + INDEX；
+  - 0 重复、0 空/近空、0 测试/smoke、0 自动捕获；
+  - 11/11 导入 hash 校验通过，源文件未删除。
+- 清理动作：
+  - README 与审计报告移到 `_meta/`，`_meta` 加入 `excludeDirs`；
+  - 记忆索引从 2 条降到 **1 条**（只保留 activation）；
+  - `wiki_graph_audit`：`complete=true`、`excludedDirsApplied=[archive,inbox,_meta]`；
+  - vault git 已提交 `.gitignore`、`_meta/`、`inbox/`（源归档；`.obsidian/` 忽略）。
+- **不要启用 `tool-memory-vector`**：它没有 `excludeDirs`，启用会把 11 个导入源嵌入。
+- 另见：`~/.dsh/memories` 还有 16 个旧文件，暂未并入 vault；单独决策。
 
 ## 6. 开始交流的条件
 

@@ -17,15 +17,15 @@
 
 - EigenFlux CLI **0.6.8** 已装（用户级）；身份/资料/邮箱已在 Console 完成；Agent 名 **DSH**
 - 心跳：`EigenFlux 网络收件箱`，Asia/Shanghai，cron `0 0,2,4,6,8,12 * * *`（00/02/04/06/08/12，谷段）；常驻任务：`EigenFluxDSHWatcher`（登录自启，Running，**VBS 隐藏启动、无控制台窗口**）常驻 `eigenflux stream`，PM 只 toast + 落受控临时文件，再立即 headless 处理（已回复则跳过）；心跳兜底
-- 记忆：desktop 已激活 `@jacklika/dsh-memory@0.1.7-rc.40`，vaultRoot=`~/.dsh/memory-vault`（safeToWrite/git=true，`wiki_write/search/read` PASS）；Obsidian 1.14.4 + 11 个 Desktop `.md` 导入；`inbox` 已从记忆索引排除；账本 12 条 + 清理审计子代理运行中
+- 记忆：desktop 已激活 `@jacklika/dsh-memory@0.1.7-rc.40`，vaultRoot=`~/.dsh/memory-vault`（safeToWrite/git=true，`wiki_write/search/read` PASS）；Obsidian 1.14.4 + 11 个源文档在 `inbox/`；`inbox`/`_meta` 从记忆索引排除，索引只剩 activation 1 条；清理审计完成（0 重复/0 空/0 测试、0 删除）；账本 13 条
 - 广播已发布：v0.1 item `370848836651843584`（22/6/0）；v0.2.1 item `371341612887834624`（11 阅读 / 3 赞 / 0 广播回复；已回 7 条私信/公开回复）
 - 本地约定：Home `~/.eigenflux-dsh/.eigenflux`；skills target 已注册到 `~/.agents/skills`（host `deepseek-harness`）
 
 ## ⏭️ 下一步（接手第一件事）
 
-1. 生产接入：在 DSH 应用插件管理里装 `@jacklika/dsh-memory`，配置稳定 vaultRoot，再重启；不手改 Electron 管理的 desktop
+1. 做一次跨会话 `memory_recall` 验收；观察 auto-capture 是否产生噪声
 2. 继续 EigenFlux 公开交流；只记录有复用价值的候选，不刷评论；账本先补 JSONL 校验
-3. 在任何 Runtime 接入前先落 `proposed→active` 与 `read_version/base_version`；不要先写 Qdrant/mem0/网关
+3. 在任何进一步自动化前先落 `proposed→active` 与 `read_version/base_version`；不要先写 Qdrant/mem0/网关
 
 ## 🚧 阻塞 / 待人类拍板
 
@@ -41,7 +41,7 @@
 ## ✅ 验收
 
 - **命令**：`bash scripts/verify.sh` → **5/5**；相对链接 0 broken；无个体项目名
-- **文档/模板验收**：`docs/MEMORY-AUDIT.md` 5.1/5.2/5.3 含试装、导入、启用与清理；`docs/MEMORY-LEDGER.md` + JSONL 12 条；`docs/NETWORK-FEEDBACK.md` 含反馈记录；`templates/.github/PULL_REQUEST_TEMPLATE.md` 含四证据点与 `pending-review`
+- **文档/模板验收**：`docs/MEMORY-AUDIT.md` 5.1/5.2/5.3 含试装、导入、启用与清理；`docs/MEMORY-LEDGER.md` + JSONL 13 条；`docs/NETWORK-FEEDBACK.md` 含反馈记录；`templates/.github/PULL_REQUEST_TEMPLATE.md` 含四证据点与 `pending-review`
 - **广播/调度验收**：`profile items` 能看到 v0.1 `370848836651843584` 与 v0.2.1 `371341612887834624`；`schedule_list` 有 1 个触发器，cron `0 0,2,4,6,8,12 * * *`；`Get-ScheduledTask EigenFluxDSHWatcher` = Running
 
 ## 📌 接手自检（逐条确认，缺项先补齐再动手）

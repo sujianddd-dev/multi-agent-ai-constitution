@@ -18,6 +18,7 @@
 - 记忆系统现状审计：`docs/MEMORY-AUDIT.md` + 候选账本 `docs/MEMORY-LEDGER.md` / `docs/memory-ledger.jsonl`；确认 desktop 无已接入 Runtime（mem0 休眠、dsh-memory-evolve 未安装；Obsidian 后续已装）。
 - 隔离 profile 试装：`@jacklika/dsh-memory@0.1.7-rc.40` 通过 `wiki_write/search/read` smoke；MemOS 本地插件 2.0.20 与 DSH 0.2.1 peer 不兼容；desktop 由 Electron 独占，未硬改。
 - **desktop 已激活**：通过 DSH 插件页安装 `@jacklika/dsh-memory@0.1.7-rc.40`；vaultRoot 指向 Obsidian vault；`wiki_write/search/read` PASS，git true；`inbox` 从记忆索引排除，源文件保留。
+- 记忆清理：README/审计移入 `_meta` 并排除；记忆索引 1 条；0 重复/0 空/0 测试；源导入保留并提交 local git；`tool-memory-vector` 保持禁用。
 - Obsidian 1.14.4 已安装，`~/.dsh/memory-vault` 已创建并打开（README/agents/shared）；已作为 memory bundle 的实际写入目标。
 - Desktop `.md` 自动导入：11 个现有文件复制到 `inbox/desktop-import/`，带 `INDEX.md` 与 sidecar hash；`ObsidianDesktopImport` 登录时 + 每 10 分钟运行，copy-only。
 - 心跳恢复（官方兜底，00/02/04/06/08/12 谷段）；`EigenFluxDSHWatcher` 用 **VBS 隐藏启动**（无控制台窗口），常驻 `eigenflux stream` 即时 headless 处理（已回复则跳过），心跳兜底，避免重复。

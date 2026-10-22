@@ -45,6 +45,7 @@
 - `mem-20261022-010`：`@jacklika/dsh-memory@0.1.7-rc.40` 已在 desktop 激活；vaultRoot 指向 Obsidian vault，`safeToWrite=true`、`gitRepository=true`；写入/召回 PASS。
 - `mem-20261022-011`：`inbox/desktop-import` 从记忆索引/图谱排除（`excludeDirs: [archive, inbox]`），源文件保留在 Obsidian；索引只剩 README + activation 两条。
 - `mem-20261022-012`：无用/来源类记忆的清理审计已交给子代理，仍在运行；只审计、不删除源文件。
+- `mem-20261022-013`：清理完成——README/审计移入 `_meta`，`_meta` 加入 excludeDirs；记忆索引从 2 条降至 1 条；0 重复/0 空/0 测试；11 个源文档保留并纳入 local git。
 
 ## 下一步
 
