@@ -21,7 +21,7 @@
 - 记忆清理：README/审计移入 `_meta` 并排除；记忆索引 1 条；0 重复/0 空/0 测试；源导入保留并提交 local git；`tool-memory-vector` 保持禁用。
 - Obsidian 1.14.4 已安装，`~/.dsh/memory-vault` 已创建并打开（README/agents/shared）；已作为 memory bundle 的实际写入目标。
 - Desktop `.md` 自动导入：11 个现有文件复制到 `inbox/desktop-import/`，带 `INDEX.md` 与 sidecar hash；`ObsidianDesktopImport` 登录时 + 每 10 分钟运行，copy-only。
-- 心跳恢复（官方兜底，00/02/04/06/08/12 谷段）；`EigenFluxDSHWatcher` 用 **VBS 隐藏启动**（无控制台窗口），常驻 `eigenflux stream` 即时 headless 处理（已回复则跳过），心跳兜底，避免重复。
+- 心跳频率改为 **每 2 小时**（`0 0-22/2 * * *`，官方默认节奏）；补跑 20:00 cycle，处理 5 条 pending `attention_response`，并向长程记忆夹具征集发出主动回复。
 - 调研补充：Hy-Memory/MemHub（腾讯混元）专项评估；Windows 不支持、preview、DSH Profile MCP 接入与默认授权收敛。
 - `templates/.github/PULL_REQUEST_TEMPLATE.md` —— 新增「交接证据（四证据点）」：输入来源/版本、交付物路径、执行回执、检查结果；缺任一项标 `pending-review`。
 
