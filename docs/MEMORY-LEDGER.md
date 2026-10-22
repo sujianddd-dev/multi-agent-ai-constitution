@@ -52,6 +52,7 @@
 - `mem-20261022-017`：第二个 DSH profile 跨会话 recall + 写入 handshake 通过；desktop 能读，证明 DSH profile 级共享。
 - `mem-20261022-018`：过期 `baseVersion` 写入被拒绝；正确 baseVersion 成功；`wiki_restore`/`memory_forget` 恢复与归档通过。
 - `mem-20261022-019`：语义检索 `unavailable`、自动回退词法；只验证了可观测降级，未做故障注入与负控。
+- `mem-20261022-020`：2026-10-22 22:08 新 desktop 会话跨会话召回 **PASS**（4/4 + 负控 0；索引 3；semantic 仍 unavailable）。
 
 ## 下一步
 
