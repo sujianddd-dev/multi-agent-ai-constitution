@@ -11,11 +11,18 @@
 | 多 Agent 共享 | ⚠️ **两个 DSH Agent 通过** | `memory-test2` 读到 activation/session/dream 三条；写入 handshake note，desktop 能读；已归档 |
 | Integrity | ✅ **冲突检测通过** | `wiki_write` 用过期 `baseVersion` 被拒绝（`changed since it was read`）；正确 baseVersion 随后成功 |
 | Authority | ⚠️ **部分** | per-agent namespace、串行队列、git、baseVersion 有；没有运行时 `proposed→active` 闸，也没有 authority 与 confidence 的强制分离 |
-| 跨会话召回 | ✅ **通过** | 第二个 DSH Agent 用 `memory_search` 找到 activation + session digest；语义检索 `unavailable`，仅词法 |
+| 跨会话召回 | ✅ **通过（含新会话实测）** | 第二个 DSH Agent 用 `memory_search` 找到 activation + session digest；2026-10-22 22:08 新 desktop 会话 4/4 + 负控 0；语义检索 `unavailable`，仅词法+图 |
 | 冲突 | ✅ **通过** | 过期写拒绝；归档/恢复不回滚 raw 历史 |
 | 降级 | ⚠️ **观察通过，未做故障注入** | `wiki_search` 返回 `semantic=unavailable`、`fused=false`，自动回退词法；没有模拟索引损坏/超时 |
 | 恢复 | ✅ **通过** | `wiki_restore` 恢复到 v1；`memory_forget` 归档到 `archive/`；git 历史保留 |
 | EigenFlux 持续探索 | ⏳ **运行中** | 心跳每 2 小时；20:00 cycle 完成 5 条 attention、主动回复夹具征集、发布 Dream 广播；下一次 22:00 |
+
+## 新会话实测（2026-10-22 22:08，PASS）
+
+- 在新 desktop 会话中只用记忆工具检索，不依赖当前对话上下文。
+- 命中 session digest：`agents/session-25e31659-8910-4a5b-931a-05b3a28e4df7/2026-10-22-dsh-memory-go-live-heartbeat-free-model-trial.md`。
+- 4/4 通过：心跳 **每 2 小时**；11 个 Desktop 源文档在 `inbox/desktop-import/` 且不进入索引；索引 **3 条**；不存在关键词返回 **0**。
+- 边界：`semantic=unavailable`，这是词法+图召回，不是向量召回；`_meta/CLEANUP-AUDIT.md` 的旧快照（index 2）已与现状区分。
 
 ## 还没做完（不是配置开关）
 
@@ -27,7 +34,7 @@
 
 ## 今天可以收口的部分
 
-- DSH 单机记忆：**已收口**（写入/召回/冲突/恢复/第二个 DSH Agent）。
+- DSH 单机记忆：**已收口**（写入/召回/冲突/恢复/第二个 DSH Agent + 新 desktop 会话实测）。
 - 跨框架多 Agent 共享：**不建议今天硬上**；需要先选 MCP 共享层与 authority 方案，否则会得到一个绕过队列/回执的假共享。
 - Dream：设计已进 v0.2.5，手动 pass 已做；自动调度留到运行时实现后。
 
