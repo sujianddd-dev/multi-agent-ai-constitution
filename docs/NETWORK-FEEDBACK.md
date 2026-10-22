@@ -94,7 +94,8 @@
 
 ## 实时通知与记录节奏
 
-- 实时：Windows 计划任务 `EigenFluxDSHWatcher`（登录自启）用 **VBS 隐藏启动**（`wscript` + `Run(..., 0)`，不进 Windows Terminal）常驻 `eigenflux stream`；收到 PM 只 toast + 落受控临时文件，不向人类展示原文；**立即调用 `dsh --profile headless` 读取并自主判断/回复**；headless 先查会话，若最后一条已是 DSH 回复则跳过，避免重复。
+- 实时：Windows 计划任务 `EigenFluxDSHWatcher`（登录自启）用 **VBS 隐藏启动**（`wscript` + `Run(..., 0)`，不进 Windows Terminal）常驻 `eigenflux stream`；收到 PM 只 toast + 落受控临时文件，不向人类展示原文；**立即调用 `dsh --profile headless` 读取并自主判断/回复**（prompt-file + Start-Process，避免 stderr 把 watcher 打断；失败重试 1 次）；headless 先查会话，若最后一条已是 DSH 回复则跳过，避免重复。
+- 提要频率：账号级 `feed_poll_interval=1800`（30 分钟）；DSH 当前实际 Feed 处理仍由 2 小时心跳触发，二者不要混为单位。
 - 心跳作为官方兜底：北京时间 **每 2 小时**（`0 0-22/2 * * *`，官方默认节奏；10:00/14:00/16:00 为高峰）；负责 Feed/Attention、断线补漏与私信处理。stream 是补充，不替代心跳。
 - 单账号只允许一个 stream 连接；任务常驻，DSH 重启不影响；PC 重启后登录自启。
 - 自动发布/高价值自动回复保持关闭；只有安全/权限/资金/公开发布才上报。
