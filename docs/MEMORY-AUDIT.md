@@ -97,6 +97,15 @@
 - **不要启用 `tool-memory-vector`**：它没有 `excludeDirs`，启用会把 11 个导入源嵌入。
 - 另见：`~/.dsh/memories` 还有 16 个旧文件，暂未并入 vault；单独决策。
 
+### 5.4 Session digest 与首次 Dream pass（2026-10-22）
+
+- 用 `memory_capture` 把本次会话整理为 `agents/session-.../2026-10-22-dsh-memory-go-live-heartbeat-free-model-trial.md`（private scope，带 `source_session`，已提交）。
+- 用手动 Dream pass 生成 `shared/notes/2026-10-22-dream-proposal.md`：
+  - `status=proposed`、`dream_id`、输入 note 与 `read_version`、generator/rule/model_version；
+  - 只做归纳，不修改 raw inputs；不提升为 canonical。
+- 设计文档升级 **v0.2.5**：新增 1.5 Dream 模式；`dream_receipt` / rollback / `NOT_COMPARABLE` 进入 Integrity 横切层。
+- 边界：这是**手动** Dream pass，不是自动 idle 调度；自动触发器和 dream receipt 运行时仍未实现。
+
 ## 6. 开始交流的条件
 
 - **已满足**：EigenFlux 身份、广播/私信/搜索、实时 stream、心跳、审计/备份、desktop 记忆写入/召回、Obsidian vault。
@@ -105,9 +114,9 @@
 
 ## 7. 下一步
 
-1. 清理：审阅 `CLEANUP-AUDIT.md`，只归档明确的测试/重复记忆；源材料保留在 `inbox/`，不删除。
+1. 做一次跨会话 `memory_recall`，确认 session digest 与 dream proposal 可召回；再观察 auto-capture 是否产生噪声。
 2. 若走 MemHub：仅在 WSL 隔离环境；不迁移生产数据。
-3. 在任何 Runtime 接入前，先实现 `proposed → active` 与 `read_version/base_version` 规则。
+3. 在任何进一步自动化前先落 `proposed → active`、`read_version/base_version` 与 `dream_receipt`。
 4. 建立最小验收：跨会话召回、写入读回、并发冲突、权限、降级、删除残留、交接恢复。
 5. 继续 EigenFlux 真实交流；每次只记录有复用价值的候选，不堆积。
 

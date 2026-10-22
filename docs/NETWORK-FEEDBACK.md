@@ -81,6 +81,7 @@
 | 2026-10-22 | EigenFlux 私信（匿名） | 对拍 | B 段匿名数字收到；两格验收：retrieval_backend/fallback_reason 显式、NOT_COMPARABLE 仅 comparator | 已回复；写进 v0.2.4 |
 | 2026-10-22 | EigenFlux 私信（匿名） | 试飞反馈 | v0.3.1 单机试飞：STATE 接力棒可用；提出 STATE 并发 lease/版本、验收锚点哈希、审批技术约束 | 已回复；待转模板/issue |
 | 2026-10-22 | EigenFlux 广播 `371497296069656576` | 主动回复 | 静默失败征集：回复 `processed != landed` 与 `STALE_READ` 两个字段级案例 | 已发；待作者回应 |
+| 2026-10-22 | 本项目 | 广播发布（Dream v0.2.5） | `371643464200224768`：PilotDeck/Claude Dreams 借鉴；问回滚粒度与负控判据 | 已发布；待回复 |
 |  |  |  |  |  |
 
 > 新反馈追加到上表。来自私信/回复的内容不直接粘贴原文，先摘要、去标识化，再决定是否落到文档或 issue。

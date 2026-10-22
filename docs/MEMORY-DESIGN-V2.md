@@ -1,6 +1,6 @@
 # 多智能体记忆系统设计方案 v0.2（重构建议）
 
-> **版本**：v0.2.4（2026-10-22，含 B 段验收字段） ｜ **依据**：原设计稿 v0.1 + Hy-Memory / MemHub 调研 + GitHub/论文/EigenFlux 公开信号 + 首批广播回复
+> **版本**：v0.2.5（2026-10-22，含 Dream 整合） ｜ **依据**：原设计稿 v0.1 + Hy-Memory / MemHub 调研 + GitHub/论文/EigenFlux 公开信号 + 首批广播回复
 >
 > **一句话**：原设计不是“方向错了”，而是**把已经有人做好的东西又写了一遍**。v0.2 做减法：**一个共享记忆 Runtime + 一个人工 canonical 层 + 一个交接证据层**。
 
@@ -94,6 +94,34 @@
 
 **v0.2.4 结论**：回执要能回答“用的哪个 retrieval backend、为什么降级、谁判定不可比”，而不是只记录一个 `execution_path`。
 
+### 1.5 Dream 模式：空闲整合（v0.2.5）
+
+> 参考：**PilotDeck**（OpenBMB/清华 THUNLP/面壁）的 Dream Mode：空闲窗口整理记忆碎片、白盒可查、一键回滚；**Claude Dreams** 也把“读取现有记忆 + 历史会话，整理重复/冲突/过时内容”做成异步任务。两者都证明“整合”是独立阶段，不是写入的副作用。
+
+Dream 不是自动把摘要变成事实；它是**产生 proposed 候选 + 可回滚回执**的整合流程。
+
+| 风险 | 硬约束 |
+|---|---|
+| 摘要覆盖原始证据 | 原始 fragment 只追加、不修改；Dream 只读快照，不改 raw |
+| 旧版本内容被静默合并 | 输入带 `read_version`；版本不一致 → `NOT_COMPARABLE`，不重算 |
+| 模型“归纳”被当成事实 | 输出一律 `status=proposed`、`authority=candidate`；不得直接 `active` |
+| 整合后无法追责/回滚 | 产出 `dream_receipt`：`dream_id`、输入清单与版本、before/after、计数、rollback 指针 |
+| 外部内容被提升 | `trust/taint` 原样保留；外部广播/私信不得因 Dream 获得 authority |
+| 半途失败留下半成品 | 幂等、可重跑；`execution_path` + `landed_receipt`；失败不覆盖 canonical |
+
+**流程**：
+
+1. 触发：空闲窗口、owner 明确请求，或累计 N 个未整合 fragment；**不是每轮对话**。
+2. 快照：记录输入 note 的 `read_version`；raw fragments 不变。
+3. 聚类/去重/冲突：按 scope、实体、时间窗；旧 spec/旧 generator 段直接 `NOT_COMPARABLE`。
+4. 生成候选：`summary` 带 `generator/rule/model_version`、source ids、`read_version`；写入 `proposed`。
+5. 回执：`dream_receipt` + 可回滚快照；one-click rollback 只新增回滚版本，不删除历史。
+6. 审核：Curator 逐条 diff；只有明确批准的条目才能 `proposed → active`；其余留在 proposed/archive。
+
+**Dream 的最小验收**：重复项不重复、冲突不被静默合并、过期项不覆盖新项、raw 可追溯、回滚可恢复、负控样本必红、正控干净批次不得红。
+
+**当前落地**：`@jacklika/dsh-memory` + Obsidian vault 已能保存 raw note；本日已做一次 **手动 Dream pass**：`shared/notes/2026-10-22-dream-proposal.md`（proposed，未提升），输入为 activation note 与 session digest。自动触发器和 `dream_receipt` 运行时仍未实现。
+
 ---
 
 ## 2. v0.2 架构
@@ -129,14 +157,14 @@
 ```
 
 > **横切层：Memory Integrity / Authority**（不存业务内容，只做约束）
-> 单写者 · append-only evidence · `processed_receipt` / `landed_receipt` / `read_receipt` · `read_version` / `base_version` / `STALE_READ` · `retrieval_backend` / `fallback_reason` / `cmp_source` · `authority_epoch`（per agent/scope） · `execution_path` · `generator_version` · `proposed → active` 闸 · 使用前再验权 · 固化 = fenced write · `no-op` 合法 · 冲突 HOLD · 淘汰级联清 derived。
+> 单写者 · append-only evidence · `processed_receipt` / `landed_receipt` / `read_receipt` · `read_version` / `base_version` / `STALE_READ` · `retrieval_backend` / `fallback_reason` / `cmp_source` · `authority_epoch`（per agent/scope） · `execution_path` · `generator_version` · `dream_receipt` / `dream_id` / rollback · `proposed → active` 闸 · 使用前再验权 · 固化 = fenced write · `no-op` 合法 · 冲突 HOLD · 淘汰级联清 derived。
 
 ### 组件职责
 
 | 组件 | 职责 | 不做什么 |
 |---|---|---|
 | MemHub / Hy-Memory | 会话/编码轨迹导入、抽取、去重、冲突、检索、治理、Matters/Wiki | 不负责人工 Markdown 编辑与 Git |
-| Memory Integrity / Authority | 单写者、receipt、authority vs confidence、proposed→active、use-time auth、consolidation fence、`execution_path`、`generator_version`、`landed_receipt`、`read_version`/`base_version`/`STALE_READ`、`retrieval_backend`/`fallback_reason`/`cmp_source` | 不存业务内容 |
+| Memory Integrity / Authority | 单写者、receipt、authority vs confidence、proposed→active、use-time auth、consolidation fence、`execution_path`、`generator_version`、`landed_receipt`、`read_version`/`base_version`/`STALE_READ`、`retrieval_backend`/`fallback_reason`/`cmp_source`、`dream_receipt`/`dream_id`/rollback | 不存业务内容 |
 | Obsidian | 人类可读 canonical、决策/项目知识、Git 版本；只收 `active` | 不做向量检索、不做自动抽取、不做多 Agent 并发 |
 | 四证据点 | 交接回执与验收 | 不替代记忆检索 |
 | 薄 Host 适配 | Windows ↔ WSL/Linux 的 MCP/stdio 桥（如需要） | 不实现存储/检索/抽取 |
@@ -170,7 +198,7 @@
 ### 只写这五样
 
 1. **Memory Contract**：来源、版本、trust/taint、scope、`evidence_id`、`supersedes`、`status`（`proposed/active/superseded/conflict`）、`authority` 与 `confidence` 分开。
-2. **Memory Integrity / Authority**：单写者、append-only evidence、`processed_receipt` / `landed_receipt` / `read_receipt`、`read_version` / `base_version` / `STALE_READ`、`retrieval_backend` / `fallback_reason` / `cmp_source`、`authority_epoch`（per agent/scope）、`authority_epoch_set`、`execution_path`、`generator_version`、`proposed→active` 闸、use-time auth、consolidation fenced write、`no-op`/HOLD、pre-ping + 幂等重跑。
+2. **Memory Integrity / Authority**：单写者、append-only evidence、`processed_receipt` / `landed_receipt` / `read_receipt`、`read_version` / `base_version` / `STALE_READ`、`retrieval_backend` / `fallback_reason` / `cmp_source`、`dream_receipt` / `dream_id` / rollback、`authority_epoch`（per agent/scope）、`authority_epoch_set`、`execution_path`、`generator_version`、`proposed→active` 闸、use-time auth、consolidation fenced write、`no-op`/HOLD、pre-ping + 幂等重跑。
 3. **Host 适配/策略**：Windows↔WSL 的 MCP 桥（如需要）、DSH Profile 授权收敛、跨 Agent 只读、导入 dry-run/quarantine。
 4. **Obsidian Curator Workflow**：inbox → 审阅 → canonical → Git；只存已确认知识；摘要必须 link `decision_id`。
 5. **Evaluation Harness**：CMB / LoCoMo / LongMemEval + 交接/冲突/撤销/并发/污染/召回归因场景。
@@ -229,7 +257,8 @@
 ## 7. 结论
 
 - **要重构，但不是重写**：把“四层 + 自建网关”收缩为“一个共享 Runtime + 一个 Obsidian canonical + 四证据点 + 一层 Integrity/Authority”。
-- **实际广播/Issue/首批回复暴露的问题比“选哪个库”更根本**：索引≠处理、静默失败、双写分叉、固化提权、摘要当事实底座、自动 confirmed、淘汰残留、静默降级、`processed != landed`、全局 epoch 误伤、读后旧版覆盖、retrieval backend/不可比来源不透明。v0.2.4 已把这些写进硬约束。
+- **实际广播/Issue/首批回复暴露的问题比“选哪个库”更根本**：索引≠处理、静默失败、双写分叉、固化提权、摘要当事实底座、自动 confirmed、淘汰残留、静默降级、`processed != landed`、全局 epoch 误伤、读后旧版覆盖、retrieval backend/不可比来源不透明、Dream 误合并。v0.2.5 已把这些写进硬约束。
+- **Dream 是独立阶段，不是写入副作用**：PilotDeck 与 Claude Dreams 都证明“空闲整合 + 白盒 + 回滚”有价值；但整合必须产出 proposed + `dream_receipt`，不能把摘要直接提升为事实。
 - **Hy-Memory/MemHub 是目前最接近你目标的方案**，但 Windows 不支持 + preview，不能直接当生产依赖。
 - **Windows 原生今天可落地的是 MemOS**；MemHub 值得在 WSL 做 2 周试点。
 - **无论选哪条**，都不要再自建 Qdrant/mem0/六类/网关；把精力放在 **Integrity/Authority + canonical 治理 + 交接证据 + 评测**。
@@ -238,6 +267,8 @@
 
 ## 8. 参考
 
+- [PilotDeck](https://github.com/OpenBMB/PilotDeck)（Dream Mode：空闲整合、白盒记忆、一键回滚）
+- [Claude Dreams 文档](https://platform.claude.com/docs/zh-CN/managed-agents/dreams)（读取现有记忆 + 历史会话，整理重复/冲突/过时内容）
 - [Hy-Memory](https://github.com/Tencent-Hunyuan/Hy-Memory) ｜ [MemHub README](https://github.com/Tencent-Hunyuan/Hy-Memory/blob/main/memhub/README.md)
 - [DSH 接入说明](https://github.com/Tencent-Hunyuan/Hy-Memory/blob/main/memhub/docs/harness-support/deepseek-harness.md)
 - [Harness 支持矩阵](https://github.com/Tencent-Hunyuan/Hy-Memory/blob/main/memhub/docs/harness-support/README.md)
