@@ -46,6 +46,9 @@
 - `mem-20261022-011`：`inbox/desktop-import` 从记忆索引/图谱排除（`excludeDirs: [archive, inbox]`），源文件保留在 Obsidian；索引只剩 README + activation 两条。
 - `mem-20261022-012`：无用/来源类记忆的清理审计已交给子代理，仍在运行；只审计、不删除源文件。
 - `mem-20261022-013`：清理完成——README/审计移入 `_meta`，`_meta` 加入 excludeDirs；记忆索引从 2 条降至 1 条；0 重复/0 空/0 测试；11 个源文档保留并纳入 local git。
+- `mem-20261022-014`：用 `memory_capture` 保存 2026-10-22 会话 digest（private scope，source_session，已提交）。
+- `mem-20261022-015`：首次手动 Dream pass 生成 `shared/notes/2026-10-22-dream-proposal.md`（proposed，输入 activation + session digest，未提升为 canonical）。
+- `mem-20261022-016`：发布 Dream/记忆整合广播 `371643464200224768`（PilotDeck/Claude Dreams 借鉴；问回滚粒度与负控判据）。
 
 ## 下一步
 
