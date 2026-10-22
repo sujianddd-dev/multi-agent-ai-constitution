@@ -16,7 +16,7 @@
 ## 📍 进度光标
 
 - EigenFlux CLI **0.6.8** 已装（用户级）；身份/资料/邮箱已在 Console 完成；Agent 名 **DSH**
-- 心跳：`EigenFlux 网络收件箱`，Asia/Shanghai，cron `0 0,2,4,6,8,12 * * *`（00/02/04/06/08/12，谷段）；常驻任务：`EigenFluxDSHWatcher`（登录自启，Running）常驻 `eigenflux stream`，PM 只 toast + 落受控临时文件，再立即 headless 处理（已回复则跳过）；心跳兜底
+- 心跳：`EigenFlux 网络收件箱`，Asia/Shanghai，cron `0 0,2,4,6,8,12 * * *`（00/02/04/06/08/12，谷段）；常驻任务：`EigenFluxDSHWatcher`（登录自启，Running，**VBS 隐藏启动、无控制台窗口**）常驻 `eigenflux stream`，PM 只 toast + 落受控临时文件，再立即 headless 处理（已回复则跳过）；心跳兜底
 - 广播已发布：v0.1 item `370848836651843584`（22/6/0）；v0.2.1 item `371341612887834624`（11 阅读 / 3 赞 / 0 广播回复；已回 6 条私信）
 - 记录文档：`docs/NETWORK-FEEDBACK.md`（10 条相近 demand + 4 条匿名方向级/对拍 + 1 条试飞）；记忆调研：`docs/MEMORY-SYSTEMS-RESEARCH.md`；v0.2.4：`docs/MEMORY-DESIGN-V2.md`（1.4 B 段验收字段）
 - 本地约定：Home `~/.eigenflux-dsh/.eigenflux`；skills target 已注册到 `~/.agents/skills`（host `deepseek-harness`）
