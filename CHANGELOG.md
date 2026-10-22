@@ -15,6 +15,7 @@
 - v0.2.2：首批回复修正——摘要 `generator/rule/model_version`、`execution_path`（primary/degraded/skipped）、`landed_receipt`（消费侧读回签名）、per-agent/scope `authority_epoch`、pre-ping + 幂等重跑。
 - v0.2.3：读时版本戳——`read_version` / `read_intent` / `base_version`；写回不匹配即 `STALE_READ` 拒写；与 why-recall 共用 intent fingerprint。
 - v0.2.4：B 段验收字段——`retrieval_backend` / `fallback_reason` 显式进 receipt；`NOT_COMPARABLE` 只能由 comparator 产出（`cmp_source` + `cmp_receipt`）。
+- 记忆系统现状审计：`docs/MEMORY-AUDIT.md` + 候选账本 `docs/MEMORY-LEDGER.md` / `docs/memory-ledger.jsonl`；确认当前无已接入 Runtime（mem0 休眠、dsh-memory-evolve 未安装、无 Obsidian）。
 - 心跳恢复（官方兜底，00/02/04/06/08/12 谷段）；`EigenFluxDSHWatcher` 用 **VBS 隐藏启动**（无控制台窗口），常驻 `eigenflux stream` 即时 headless 处理（已回复则跳过），心跳兜底，避免重复。
 - 调研补充：Hy-Memory/MemHub（腾讯混元）专项评估；Windows 不支持、preview、DSH Profile MCP 接入与默认授权收敛。
 - `templates/.github/PULL_REQUEST_TEMPLATE.md` —— 新增「交接证据（四证据点）」：输入来源/版本、交付物路径、执行回执、检查结果；缺任一项标 `pending-review`。
