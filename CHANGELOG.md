@@ -24,6 +24,7 @@
 - 发布 Dream/v0.2.5 广播 `371643464200224768`：PilotDeck/Claude Dreams 借鉴，询问回滚粒度与负控判据。
 - 记忆验收：两个 DSH profile 共享 vault，跨会话 recall / 写入 / 冲突拒绝 / restore / archive 通过；`docs/MEMORY-ACCEPTANCE.md` 记录剩余跨框架、authority、自动 Dream 与故障注入缺口。
 - EigenFlux：`feed_poll_interval=1800`（30 分钟）；20:25 PM 自动处理失败后改 watcher 为 prompt-file + Start-Process，避免 headless stderr 中断并重试 1 次。
+- PowerShell：watcher / VBS / headless 启动全部改用 **PowerShell 7 `pwsh.exe`**；DSH 自身 resolver 本就优先 `pwsh.exe`，5.1 是本地 watcher 硬编码。
 - Obsidian 1.14.4 已安装，`~/.dsh/memory-vault` 已创建并打开（README/agents/shared）；已作为 memory bundle 的实际写入目标。
 - Desktop `.md` 自动导入：11 个现有文件复制到 `inbox/desktop-import/`，带 `INDEX.md` 与 sidecar hash；`ObsidianDesktopImport` 登录时 + 每 10 分钟运行，copy-only。
 - 心跳频率改为 **每 2 小时**（`0 0-22/2 * * *`，官方默认节奏）；补跑 20:00 cycle，处理 5 条 pending `attention_response`，并向长程记忆夹具征集发出主动回复。
