@@ -11,7 +11,7 @@
 | DSH profile | 无 memory 插件 | `package.json` 依赖只有 search/email/WSL/mobile-remote 等；`cordis.patch.yml` 无 memory 条目 |
 | mem0 | **休眠** | 本机有 `config.json`，但 profile 没有 mem0 bridge / 依赖，未形成写路径 |
 | dsh-memory-evolve | **未安装** | 有独立源码 checkout（v0.1.0），未加入 profile、未启用、未产生运行数据 |
-| Obsidian / Markdown canonical | **未建立** | 常见目录未发现 `.obsidian` vault |
+| Obsidian / Markdown canonical | **已安装，未接入** | Obsidian 1.14.4；vault `~/.dsh/memory-vault` 已创建并打开（含 README/agents/shared）；尚无插件自动写入 |
 | 共享记忆 Runtime | **未安装** | WSL Ubuntu 处于 Stopped；`memhub` / `memos` / `hy_memory` 均不存在 |
 | EigenFlux CLI | 0.6.8，可用 | 身份已验证；广播、私信、搜索可用 |
 | EigenFlux 心跳 | 6 次/日（谷段） | `0 0,2,4,6,8,12 * * *` Asia/Shanghai |
@@ -22,11 +22,11 @@
 
 `docs/MEMORY-DESIGN-V2.md` 已到 v0.2.4，定义了共享 Runtime、Integrity/Authority、Obsidian canonical、四证据点。但：
 
-- 没有实际接入任何 Runtime；
+- desktop 没有实际接入任何 Runtime；隔离 `memory-test2` 已通过 `@jacklika` smoke；
 - 没有 `processed_receipt` / `landed_receipt` / `read_version` / `base_version` 的运行时；
 - 没有 `proposed → active` 的实际状态机；
 - 没有单写者/租约/读回校验；
-- 没有 Obsidian canonical；
+- Obsidian 1.14.4 已装、vault 已打开，但尚未接入写入；
 - 没有可召回的记忆账本（本 PR 新增候选账本，见下）。
 
 ## 3. 关键风险
@@ -44,6 +44,7 @@
 - 建立私有备份：`~/.eigenflux-dsh/backups/20261022-memory-audit/`（mem0 配置、DSH profile package/cordis、dsh-memory-evolve package/cordis；不复制到公开仓库）。
 - 新增本审计与候选账本：`docs/MEMORY-AUDIT.md`、`docs/MEMORY-LEDGER.md`、`docs/memory-ledger.jsonl`。
 - 在隔离测试 profile 中试装 `@jacklika/dsh-memory`（见 5.1）；**未改 desktop profile**，未迁移/删除现有数据。
+- 安装 Obsidian 1.14.4，创建并打开 `~/.dsh/memory-vault`（README/agents/shared）；它目前只是 canonical 查看/编辑层，未接入自动写入。
 - 已向 EigenFlux 上一条“静默失败征集”广播发出实质回复（processed != landed、STALE_READ 两个案例），并记录为候选记忆。
 
 ## 5. 运行时选择（当前时点）
@@ -78,7 +79,7 @@
 
 ## 7. 下一步
 
-1. 生产接入：在 DSH 应用的插件管理里安装 `@jacklika/dsh-memory`，配置稳定 `vaultRoot`，再重启；需先确认重启窗口（会中断当前会话）。
+1. 生产接入：在 DSH 应用的插件管理里安装 `@jacklika/dsh-memory`，配置稳定 `vaultRoot` 指向 `~/.dsh/memory-vault`，再重启；需先确认重启窗口（会中断当前会话）。
 2. 若走 MemHub：仅在 WSL 隔离环境；不迁移生产数据。
 3. 在任何 Runtime 接入前，先实现候选账本的 `proposed → active` 与 `read_version/base_version` 规则。
 4. 建立最小验收：跨会话召回、写入读回、并发冲突、权限、降级、删除残留、交接恢复。
