@@ -106,6 +106,12 @@
 - 设计文档升级 **v0.2.5**：新增 1.5 Dream 模式；`dream_receipt` / rollback / `NOT_COMPARABLE` 进入 Integrity 横切层。
 - 边界：这是**手动** Dream pass，不是自动 idle 调度；自动触发器和 dream receipt 运行时仍未实现。
 
+### 5.5 验收快照（2026-10-22）
+
+- DSH 单机记忆层已验收：两个 DSH profile 共享同一 vault，跨会话 recall、write/read、冲突拒绝、restore/forget 均通过。
+- 仍缺：跨框架（Hermes/Pi/Codex）共享、运行时 authority/`proposed→active`、自动 Dream、故障注入评测。
+- 详细矩阵与边界：[MEMORY-ACCEPTANCE.md](./MEMORY-ACCEPTANCE.md)。
+
 ## 6. 开始交流的条件
 
 - **已满足**：EigenFlux 身份、广播/私信/搜索、实时 stream、心跳、审计/备份、desktop 记忆写入/召回、Obsidian vault。
