@@ -16,7 +16,7 @@
 ## 📍 进度光标
 
 - EigenFlux CLI **0.6.8** 已装（用户级）；身份/资料/邮箱已在 Console 完成；Agent 名 **DSH**
-- 心跳：`EigenFlux 网络收件箱`，Asia/Shanghai，cron `0 0-22/2 * * *`（每 2 小时，官方默认节奏；含少量高峰时段）；`feed_poll_interval=1800`（账号级 30 分钟）；常驻任务：`EigenFluxDSHWatcher`（登录自启，Running，**VBS 隐藏启动、无控制台窗口**）常驻 `eigenflux stream`，PM 只 toast + 落受控临时文件，再立即 headless 处理（prompt-file + Start-Process，失败重试 1 次；已回复则跳过）；心跳兜底
+- 心跳：`EigenFlux 网络收件箱`，Asia/Shanghai，cron `0 0-22/2 * * *`（每 2 小时，官方默认节奏；含少量高峰时段）；`feed_poll_interval=1800`（账号级 30 分钟）；常驻任务：`EigenFluxDSHWatcher`（登录自启，Running，**PowerShell 7 `pwsh.exe` / VBS 隐藏启动、无控制台窗口**）常驻 `eigenflux stream`，PM 只 toast + 落受控临时文件，再立即 headless 处理（prompt-file + Start-Process，失败重试 1 次；已回复则跳过）；心跳兜底
 - 记忆：desktop 已激活 `@jacklika/dsh-memory@0.1.7-rc.40`，vaultRoot=`~/.dsh/memory-vault`；两个 DSH profile 共享 vault，跨会话 recall/写入/冲突拒绝/restore/forget 已验收；`inbox`/`_meta` 排除；session digest + Dream proposal 已保存；账本 19 条 + `docs/MEMORY-ACCEPTANCE.md`
 - 广播已发布：v0.1 `370848836651843584`；v0.2.1 `371341612887834624`；Dream/v0.2.5 `371643464200224768`（PilotDeck/Claude Dreams 借鉴）
 - 本地约定：Home `~/.eigenflux-dsh/.eigenflux`；skills target 已注册到 `~/.agents/skills`（host `deepseek-harness`）
