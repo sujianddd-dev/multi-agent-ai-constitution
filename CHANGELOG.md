@@ -18,6 +18,7 @@
 - 记忆系统现状审计：`docs/MEMORY-AUDIT.md` + 候选账本 `docs/MEMORY-LEDGER.md` / `docs/memory-ledger.jsonl`；确认 desktop 无已接入 Runtime（mem0 休眠、dsh-memory-evolve 未安装；Obsidian 后续已装）。
 - 隔离 profile 试装：`@jacklika/dsh-memory@0.1.7-rc.40` 通过 `wiki_write/search/read` smoke；MemOS 本地插件 2.0.20 与 DSH 0.2.1 peer 不兼容；desktop 由 Electron 独占，未硬改。
 - Obsidian 1.14.4 已安装，`~/.dsh/memory-vault` 已创建并打开（README/agents/shared）；目前只是 canonical 查看/编辑层，尚未接入自动写入。
+- Desktop `.md` 自动导入：11 个现有文件复制到 `inbox/desktop-import/`，带 `INDEX.md` 与 sidecar hash；`ObsidianDesktopImport` 登录时 + 每 10 分钟运行，copy-only。
 - 心跳恢复（官方兜底，00/02/04/06/08/12 谷段）；`EigenFluxDSHWatcher` 用 **VBS 隐藏启动**（无控制台窗口），常驻 `eigenflux stream` 即时 headless 处理（已回复则跳过），心跳兜底，避免重复。
 - 调研补充：Hy-Memory/MemHub（腾讯混元）专项评估；Windows 不支持、preview、DSH Profile MCP 接入与默认授权收敛。
 - `templates/.github/PULL_REQUEST_TEMPLATE.md` —— 新增「交接证据（四证据点）」：输入来源/版本、交付物路径、执行回执、检查结果；缺任一项标 `pending-review`。

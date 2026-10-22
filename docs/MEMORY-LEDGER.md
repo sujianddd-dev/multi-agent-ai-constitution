@@ -41,6 +41,7 @@
 - `mem-20261022-006`：desktop profile 由 Electron 应用独占管理，CLI 安装被拒绝；生产接入需走应用插件管理 + 重启。
 - `mem-20261022-007`：修正 001——desktop 仍无 Runtime；只有隔离 `memory-test2` 试点有 `@jacklika`。
 - `mem-20261022-008`：Obsidian 1.14.4 已安装，`memory-vault` 已打开；它只是 canonical 查看/编辑层，未接入自动写入。
+- `mem-20261022-009`：Desktop `.md` 自动导入已运行：11 个现有文件复制到 vault `inbox/desktop-import/`，带 `INDEX.md` 与 sidecar hash；登录时 + 每 10 分钟，copy-only。
 
 ## 下一步
 

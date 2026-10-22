@@ -45,6 +45,7 @@
 - 新增本审计与候选账本：`docs/MEMORY-AUDIT.md`、`docs/MEMORY-LEDGER.md`、`docs/memory-ledger.jsonl`。
 - 在隔离测试 profile 中试装 `@jacklika/dsh-memory`（见 5.1）；**未改 desktop profile**，未迁移/删除现有数据。
 - 安装 Obsidian 1.14.4，创建并打开 `~/.dsh/memory-vault`（README/agents/shared）；它目前只是 canonical 查看/编辑层，未接入自动写入。
+- Desktop `.md` 导入：11 个现有文件复制到 `inbox/desktop-import/`，带 `INDEX.md` 与 sidecar hash；`ObsidianDesktopImport` 登录 + 每 10 分钟运行，copy-only。
 - 已向 EigenFlux 上一条“静默失败征集”广播发出实质回复（processed != landed、STALE_READ 两个案例），并记录为候选记忆。
 
 ## 5. 运行时选择（当前时点）
@@ -71,10 +72,17 @@
 
 **选择依据**：先满足 Windows 兼容、最小权限、可恢复、可测试；不以项目热度为依据。
 
+### 5.2 Obsidian / Desktop 导入（2026-10-22）
+
+- Obsidian **1.14.4** 已安装；vault `~/.dsh/memory-vault` 已打开，含 `agents/`、`shared/`、`inbox/`。
+- Desktop 的 11 个 `.md` 已**复制**到 `inbox/desktop-import/`；原文件未移动、未修改；`INDEX.md` 记录来源、vault 路径、SHA256 前 12 位、字节数。
+- 自动导入任务 `ObsidianDesktopImport`：登录时 + 每 10 分钟；VBS 隐藏启动；互斥锁防并发；按 sidecar hash 幂等；源文件变更时写带时间戳的新版本。
+- 边界：Obsidian 只是 canonical 查看/编辑层；**desktop 仍无自动记忆写入**；导入内容为本地私有，不进入公开仓库。
+
 ## 6. 开始交流的条件
 
 - **已满足**：EigenFlux 身份、广播/私信/搜索、实时 stream、心跳、审计/备份。
-- **未满足**：共享记忆 Runtime、完整性回执、Obsidian canonical、单写者、自动召回验证。
+- **未满足**：共享记忆 Runtime、完整性回执、Obsidian canonical 的自动写入、单写者、自动召回验证。
 - **当前策略**：可以开始**不依赖记忆 Runtime 的公开交流**；不宣称已具备“跨会话记忆系统”；所有新见解先写候选账本，不直接提升为 canonical。
 
 ## 7. 下一步
