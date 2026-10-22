@@ -4,28 +4,28 @@
 >
 > **铁律**：每轮收尾必须更新本文件（不更新 = 本轮未完成）｜只写**当前**，历史归 [CHANGELOG.md](./CHANGELOG.md) 与 PR｜≤ 50 行｜**坏消息优先写**
 
-**更新时间**：2026-10-22 12:10 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
+**更新时间**：2026-10-22 13:25 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
 **上一手**：DSH（2026-10-22，v0.2.1 修正 PR [#12](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/12) + 广播记录 PR [#13](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/13) 已合并；本 PR 做 v0.2.2 + 中午心跳）
 
 ## 🎯 当前任务（一次只写一个）
 
-- **目标**：v0.2.4 补 B 段验收字段（retrieval_backend/fallback_reason/cmp_source）；心跳 + stream watcher 正常
-- **依据**：人类 2026-10-22 指令；B 段匿名对拍反馈；`docs/MEMORY-DESIGN-V2.md` 1.4 节
+- **目标**：恢复实时私信**即时处理**（headless + 已回复跳过）；心跳兜底；记录 Grok 试飞三条反馈
+- **依据**：人类 2026-10-22 13:04 私信未即时回复；`ef-communication/references/stream.md`；Grok 试飞反馈
 - **边界**：**仅交流**。不向任何外部 Agent 开放本机文件、shell、凭据、MCP 或远程访问；自动发布/高价值自动回复保持关闭；**私信由 DSH 按规则自行判断/回复，不把原文/草稿贴给人类**
 
 ## 📍 进度光标
 
 - EigenFlux CLI **0.6.8** 已装（用户级）；身份/资料/邮箱已在 Console 完成；Agent 名 **DSH**
-- 心跳：`EigenFlux 网络收件箱`，Asia/Shanghai，cron `0 0,2,4,6,8,12 * * *`（00/02/04/06/08/12，谷段）；常驻任务：`EigenFluxDSHWatcher`（登录自启，Running）常驻 `eigenflux stream`，PM 只 toast + 落受控临时文件，由心跳处理
+- 心跳：`EigenFlux 网络收件箱`，Asia/Shanghai，cron `0 0,2,4,6,8,12 * * *`（00/02/04/06/08/12，谷段）；常驻任务：`EigenFluxDSHWatcher`（登录自启，Running）常驻 `eigenflux stream`，PM 只 toast + 落受控临时文件，再立即 headless 处理（已回复则跳过）；心跳兜底
 - 广播已发布：v0.1 item `370848836651843584`（22/6/0）；v0.2.1 item `371341612887834624`（11 阅读 / 3 赞 / 0 广播回复；已回 6 条私信）
-- 记录文档：`docs/NETWORK-FEEDBACK.md`（10 条相近 demand + 4 条匿名方向级/对拍）；记忆调研：`docs/MEMORY-SYSTEMS-RESEARCH.md`；v0.2.4：`docs/MEMORY-DESIGN-V2.md`（1.4 B 段验收字段）
+- 记录文档：`docs/NETWORK-FEEDBACK.md`（10 条相近 demand + 4 条匿名方向级/对拍 + 1 条试飞）；记忆调研：`docs/MEMORY-SYSTEMS-RESEARCH.md`；v0.2.4：`docs/MEMORY-DESIGN-V2.md`（1.4 B 段验收字段）
 - 本地约定：Home `~/.eigenflux-dsh/.eigenflux`；skills target 已注册到 `~/.agents/skills`（host `deepseek-harness`）
 
 ## ⏭️ 下一步（接手第一件事）
 
-1. 监控心跳 + `EigenFluxDSHWatcher`；watcher 只提醒，私信处理以心跳为准，避免双通道重复回复
+1. 监控 `EigenFluxDSHWatcher`；headless 失败时保留 payload；心跳兜底，避免重复
 2. 选路线：WSL/Linux 试 **MemHub**（DSH Profile MCP + Hermes/Pi）；或 Windows 原生试 **MemOS**；只动测试 profile
-3. 按 v0.2.2 先上 Integrity/Authority 闸，再谈导入/固化；不要先写 Qdrant/mem0/网关
+3. 按 v0.2.4 先上 Integrity/Authority 闸，再谈导入/固化；不要先写 Qdrant/mem0/网关
 
 ## 🚧 阻塞 / 待人类拍板
 
