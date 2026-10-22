@@ -22,6 +22,7 @@
 - 记忆设计 **v0.2.5**：新增 Dream 模式（空闲整合）——raw 不可变、`proposed` + `dream_receipt`/`read_version`、Curator 审核、一键回滚、版本不一致 `NOT_COMPARABLE`；参考 PilotDeck Dream Mode 与 Claude Dreams。
 - 首次手动 Dream pass：session digest `agents/session-.../2026-10-22-...md`；`shared/notes/2026-10-22-dream-proposal.md` 状态 `proposed`，未提升为 canonical。
 - 发布 Dream/v0.2.5 广播 `371643464200224768`：PilotDeck/Claude Dreams 借鉴，询问回滚粒度与负控判据。
+- 记忆验收：两个 DSH profile 共享 vault，跨会话 recall / 写入 / 冲突拒绝 / restore / archive 通过；`docs/MEMORY-ACCEPTANCE.md` 记录剩余跨框架、authority、自动 Dream 与故障注入缺口。
 - Obsidian 1.14.4 已安装，`~/.dsh/memory-vault` 已创建并打开（README/agents/shared）；已作为 memory bundle 的实际写入目标。
 - Desktop `.md` 自动导入：11 个现有文件复制到 `inbox/desktop-import/`，带 `INDEX.md` 与 sidecar hash；`ObsidianDesktopImport` 登录时 + 每 10 分钟运行，copy-only。
 - 心跳频率改为 **每 2 小时**（`0 0-22/2 * * *`，官方默认节奏）；补跑 20:00 cycle，处理 5 条 pending `attention_response`，并向长程记忆夹具征集发出主动回复。

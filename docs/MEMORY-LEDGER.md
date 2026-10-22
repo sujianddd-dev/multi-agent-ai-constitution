@@ -49,6 +49,9 @@
 - `mem-20261022-014`：用 `memory_capture` 保存 2026-10-22 会话 digest（private scope，source_session，已提交）。
 - `mem-20261022-015`：首次手动 Dream pass 生成 `shared/notes/2026-10-22-dream-proposal.md`（proposed，输入 activation + session digest，未提升为 canonical）。
 - `mem-20261022-016`：发布 Dream/记忆整合广播 `371643464200224768`（PilotDeck/Claude Dreams 借鉴；问回滚粒度与负控判据）。
+- `mem-20261022-017`：第二个 DSH profile 跨会话 recall + 写入 handshake 通过；desktop 能读，证明 DSH profile 级共享。
+- `mem-20261022-018`：过期 `baseVersion` 写入被拒绝；正确 baseVersion 成功；`wiki_restore`/`memory_forget` 恢复与归档通过。
+- `mem-20261022-019`：语义检索 `unavailable`、自动回退词法；只验证了可观测降级，未做故障注入与负控。
 
 ## 下一步
 
