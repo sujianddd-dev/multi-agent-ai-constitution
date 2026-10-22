@@ -9,23 +9,23 @@
 
 ## 🎯 当前任务（一次只写一个）
 
-- **目标**：恢复实时私信**即时处理**（headless + 已回复跳过）；心跳兜底；记录 Grok 试飞三条反馈
-- **依据**：人类 2026-10-22 13:04 私信未即时回复；`ef-communication/references/stream.md`；Grok 试飞反馈
+- **目标**：先审计记忆现状，再补最小候选层；同时开始不依赖 Runtime 的真实交流
+- **依据**：人类 2026-10-22 任务书（先审计、禁止只给计划）；`docs/MEMORY-AUDIT.md`
 - **边界**：**仅交流**。不向任何外部 Agent 开放本机文件、shell、凭据、MCP 或远程访问；自动发布/高价值自动回复保持关闭；**私信由 DSH 按规则自行判断/回复，不把原文/草稿贴给人类**
 
 ## 📍 进度光标
 
 - EigenFlux CLI **0.6.8** 已装（用户级）；身份/资料/邮箱已在 Console 完成；Agent 名 **DSH**
 - 心跳：`EigenFlux 网络收件箱`，Asia/Shanghai，cron `0 0,2,4,6,8,12 * * *`（00/02/04/06/08/12，谷段）；常驻任务：`EigenFluxDSHWatcher`（登录自启，Running，**VBS 隐藏启动、无控制台窗口**）常驻 `eigenflux stream`，PM 只 toast + 落受控临时文件，再立即 headless 处理（已回复则跳过）；心跳兜底
-- 广播已发布：v0.1 item `370848836651843584`（22/6/0）；v0.2.1 item `371341612887834624`（11 阅读 / 3 赞 / 0 广播回复；已回 6 条私信）
-- 记录文档：`docs/NETWORK-FEEDBACK.md`（10 条相近 demand + 4 条匿名方向级/对拍 + 1 条试飞）；记忆调研：`docs/MEMORY-SYSTEMS-RESEARCH.md`；v0.2.4：`docs/MEMORY-DESIGN-V2.md`（1.4 B 段验收字段）
+- 记忆：profile 无 memory 插件；mem0 休眠；dsh-memory-evolve 未安装；无 Obsidian；WSL 停止；候选账本 `docs/MEMORY-LEDGER.md`（3 条）+ `docs/MEMORY-AUDIT.md`；记录 `docs/NETWORK-FEEDBACK.md`；v0.2.4：`docs/MEMORY-DESIGN-V2.md`
+- 广播已发布：v0.1 item `370848836651843584`（22/6/0）；v0.2.1 item `371341612887834624`（11 阅读 / 3 赞 / 0 广播回复；已回 7 条私信/公开回复）
 - 本地约定：Home `~/.eigenflux-dsh/.eigenflux`；skills target 已注册到 `~/.agents/skills`（host `deepseek-harness`）
 
 ## ⏭️ 下一步（接手第一件事）
 
-1. 监控 `EigenFluxDSHWatcher`；headless 失败时保留 payload；心跳兜底，避免重复
-2. 选路线：WSL/Linux 试 **MemHub**（DSH Profile MCP + Hermes/Pi）；或 Windows 原生试 **MemOS**；只动测试 profile
-3. 按 v0.2.4 先上 Integrity/Authority 闸，再谈导入/固化；不要先写 Qdrant/mem0/网关
+1. 用测试 profile 评估 **MemOS Windows 本地插件**；MemHub 只在 WSL 隔离试点，不迁移生产数据
+2. 继续 EigenFlux 公开交流；只记录有复用价值的候选，不刷评论；账本先补 JSONL 校验
+3. 在任何 Runtime 接入前先落 `proposed→active` 与 `read_version/base_version`；不要先写 Qdrant/mem0/网关
 
 ## 🚧 阻塞 / 待人类拍板
 
@@ -41,7 +41,7 @@
 ## ✅ 验收
 
 - **命令**：`bash scripts/verify.sh` → **5/5**；相对链接 0 broken；无个体项目名
-- **文档/模板验收**：`docs/MEMORY-DESIGN-V2.md` 1.4 节含 B 段验收字段；`docs/NETWORK-FEEDBACK.md` 含 10 条相近 demand + 反馈记录；`templates/.github/PULL_REQUEST_TEMPLATE.md` 含四证据点与 `pending-review`
+- **文档/模板验收**：`docs/MEMORY-DESIGN-V2.md` 1.4 节含 B 段验收字段；`docs/MEMORY-AUDIT.md` + `docs/MEMORY-LEDGER.md` 已建；`docs/NETWORK-FEEDBACK.md` 含 10 条相近 demand + 反馈记录；`templates/.github/PULL_REQUEST_TEMPLATE.md` 含四证据点与 `pending-review`
 - **广播/调度验收**：`profile items` 能看到 v0.1 `370848836651843584` 与 v0.2.1 `371341612887834624`；`schedule_list` 有 1 个触发器，cron `0 0,2,4,6,8,12 * * *`；`Get-ScheduledTask EigenFluxDSHWatcher` = Running
 
 ## 📌 接手自检（逐条确认，缺项先补齐再动手）

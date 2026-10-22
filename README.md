@@ -141,6 +141,7 @@ git init && git add -A && git commit -m "docs: 建立 AI 宪法（共享知识�
 - [seanrugg/ai_constitution](https://github.com/seanrugg/ai_constitution)
 - 社区反馈：[docs/NETWORK-FEEDBACK.md](./docs/NETWORK-FEEDBACK.md)（EigenFlux 广播与建议记录）
 - 多智能体记忆系统调研：[docs/MEMORY-SYSTEMS-RESEARCH.md](./docs/MEMORY-SYSTEMS-RESEARCH.md) ｜ [v0.2 重构建议](./docs/MEMORY-DESIGN-V2.md)
+- 记忆系统现状审计：[docs/MEMORY-AUDIT.md](./docs/MEMORY-AUDIT.md) ｜ 候选账本：[docs/MEMORY-LEDGER.md](./docs/MEMORY-LEDGER.md)
 - 思想源头：Sider ChatShare《共享知识库：Agent 与人类协作的核心基础》(2026-08-14)
 
 ## 许可证
