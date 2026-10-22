@@ -40,6 +40,7 @@
 - `mem-20261022-005`：官方 MemOS 本地插件 2.0.20 的 peer 要求 DSH `<0.2.0`，与当前 DSH 0.2.1 不兼容，未安装。
 - `mem-20261022-006`：desktop profile 由 Electron 应用独占管理，CLI 安装被拒绝；生产接入需走应用插件管理 + 重启。
 - `mem-20261022-007`：修正 001——desktop 仍无 Runtime；只有隔离 `memory-test2` 试点有 `@jacklika`。
+- `mem-20261022-008`：Obsidian 1.14.4 已安装，`memory-vault` 已打开；它只是 canonical 查看/编辑层，未接入自动写入。
 
 ## 下一步
 
