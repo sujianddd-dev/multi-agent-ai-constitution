@@ -43,7 +43,7 @@
 
 - 建立私有备份：`~/.eigenflux-dsh/backups/20261022-memory-audit/`（mem0 配置、DSH profile package/cordis、dsh-memory-evolve package/cordis；不复制到公开仓库）。
 - 新增本审计与候选账本：`docs/MEMORY-AUDIT.md`、`docs/MEMORY-LEDGER.md`、`docs/memory-ledger.jsonl`。
-- 未安装 MemHub/MemOS/Hy-Memory，未迁移/删除现有数据。
+- 在隔离测试 profile 中试装 `@jacklika/dsh-memory`（见 5.1）；**未改 desktop profile**，未迁移/删除现有数据。
 - 已向 EigenFlux 上一条“静默失败征集”广播发出实质回复（processed != landed、STALE_READ 两个案例），并记录为候选记忆。
 
 ## 5. 运行时选择（当前时点）
@@ -51,9 +51,22 @@
 | 方案 | 当前兼容性 | 结论 |
 |---|---|---|
 | MemHub / Hy-Memory | Linux/macOS；Windows 无原生；WSL 未启动 | 只能作为隔离 WSL 试点，不能直接生产 |
-| MemOS | Windows 原生插件路线 | 可作为下一阶段测试 profile 候选；尚未安装 |
+| MemOS 本地插件 | `@memtensor/memos-local-plugin@2.0.20` 的 peer 要求 DSH `<0.2.0`；当前 DSH 0.2.1-rc.2 | **不可直接装**；除非上游放宽 peer |
+| `@jipika/dsh-memory` | 0.6.0 测试 profile 可加载，但无 `memory_search`，写入被 headless 沙箱拒绝 | 不作为主选；需更新版本/权限后再评估 |
+| `@jacklika/dsh-memory` | 0.1.7-rc.40；peer 覆盖 DSH 0.2.x；测试 profile 通过 | **当前试点候选**；Obsidian 兼容 vault + 串行写 + git 历史 |
 | mem0 | 本机有配置但无 bridge | 先不接；需确认 egress/凭据/权限 |
 | dsh-memory-evolve | 独立源码、未安装 | 先审计其数据模型与兼容性，不直接上生产 |
+
+### 5.1 试装结果（2026-10-22）
+
+| 动作 | 结果 |
+|---|---|
+| 创建隔离 profile `memory-test2`，装 `@jacklika/dsh-memory@0.1.7-rc.40` | 成功；14 个包；`--dump-config` 显示 memory-scope / queue / git / filesystem / curator / graph / vector(disabled) |
+| 在 `memory-test2` 跑写入+召回 smoke test | **PASS**：`wiki_write` → `wiki_search` → `wiki_read`；返回路径 `agents/<session>/notes/memory-smoke-test.md`；vault 内 git 自动提交 |
+| 尝试 `dsh plugin --profile desktop add ...` | **被拒绝**：`profile "desktop" is managed exclusively by the Electron application`；未手工改 desktop，避免破坏运行中的应用 |
+| 清理 | 删除失败的 `memory-test` 与临时 vault；保留 `memory-test2` 试点 |
+
+**边界**：测试 profile 验证了“插件能装、工具能写、能召回、git 有历史”，但**不等于 desktop 已接入**；生产接入必须走 DSH 应用的插件管理/重启路径。
 
 **选择依据**：先满足 Windows 兼容、最小权限、可恢复、可测试；不以项目热度为依据。
 
@@ -65,8 +78,8 @@
 
 ## 7. 下一步
 
-1. 用 2 周测试 profile 评估 **MemOS Windows 本地插件**（不导入全量历史，先 dry-run）。
-2. 若要试 MemHub，仅在 WSL 隔离环境；不迁移生产数据。
+1. 生产接入：在 DSH 应用的插件管理里安装 `@jacklika/dsh-memory`，配置稳定 `vaultRoot`，再重启；需先确认重启窗口（会中断当前会话）。
+2. 若走 MemHub：仅在 WSL 隔离环境；不迁移生产数据。
 3. 在任何 Runtime 接入前，先实现候选账本的 `proposed → active` 与 `read_version/base_version` 规则。
 4. 建立最小验收：跨会话召回、写入读回、并发冲突、权限、降级、删除残留、交接恢复。
 5. 继续 EigenFlux 真实交流；每次只记录有复用价值的候选，不堆积。

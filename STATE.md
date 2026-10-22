@@ -4,26 +4,26 @@
 >
 > **铁律**：每轮收尾必须更新本文件（不更新 = 本轮未完成）｜只写**当前**，历史归 [CHANGELOG.md](./CHANGELOG.md) 与 PR｜≤ 50 行｜**坏消息优先写**
 
-**更新时间**：2026-10-22 13:25 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
+**更新时间**：2026-10-22 14:00 ｜ **更新者**：DSH（deepseek-flash）｜ **依据**：[AGENTS.md](./AGENTS.md)「验收」+ [docs/DOCTRINE.md](./docs/DOCTRINE.md)
 **上一手**：DSH（2026-10-22，v0.2.1 修正 PR [#12](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/12) + 广播记录 PR [#13](https://github.com/sujianddd-dev/multi-agent-ai-constitution/pull/13) 已合并；本 PR 做 v0.2.2 + 中午心跳）
 
 ## 🎯 当前任务（一次只写一个）
 
-- **目标**：先审计记忆现状，再补最小候选层；同时开始不依赖 Runtime 的真实交流
-- **依据**：人类 2026-10-22 任务书（先审计、禁止只给计划）；`docs/MEMORY-AUDIT.md`
+- **目标**：在隔离 profile 验证可用记忆 runtime；desktop 不硬改；候选账本继续可追溯
+- **依据**：人类 2026-10-22 任务书与授权；`docs/MEMORY-AUDIT.md` 5.1 试装结果
 - **边界**：**仅交流**。不向任何外部 Agent 开放本机文件、shell、凭据、MCP 或远程访问；自动发布/高价值自动回复保持关闭；**私信由 DSH 按规则自行判断/回复，不把原文/草稿贴给人类**
 
 ## 📍 进度光标
 
 - EigenFlux CLI **0.6.8** 已装（用户级）；身份/资料/邮箱已在 Console 完成；Agent 名 **DSH**
 - 心跳：`EigenFlux 网络收件箱`，Asia/Shanghai，cron `0 0,2,4,6,8,12 * * *`（00/02/04/06/08/12，谷段）；常驻任务：`EigenFluxDSHWatcher`（登录自启，Running，**VBS 隐藏启动、无控制台窗口**）常驻 `eigenflux stream`，PM 只 toast + 落受控临时文件，再立即 headless 处理（已回复则跳过）；心跳兜底
-- 记忆：profile 无 memory 插件；mem0 休眠；dsh-memory-evolve 未安装；无 Obsidian；WSL 停止；候选账本 `docs/MEMORY-LEDGER.md`（3 条）+ `docs/MEMORY-AUDIT.md`；记录 `docs/NETWORK-FEEDBACK.md`；v0.2.4：`docs/MEMORY-DESIGN-V2.md`
+- 记忆：desktop 仍无 memory 插件；隔离 `memory-test2` 装 `@jacklika/dsh-memory` 并通过 `wiki_write/search/read` smoke；MemOS 2.0.20 peer 不兼容；`@jipika` 0.6.0 失败；账本 7 条 + `docs/MEMORY-AUDIT.md`
 - 广播已发布：v0.1 item `370848836651843584`（22/6/0）；v0.2.1 item `371341612887834624`（11 阅读 / 3 赞 / 0 广播回复；已回 7 条私信/公开回复）
 - 本地约定：Home `~/.eigenflux-dsh/.eigenflux`；skills target 已注册到 `~/.agents/skills`（host `deepseek-harness`）
 
 ## ⏭️ 下一步（接手第一件事）
 
-1. 用测试 profile 评估 **MemOS Windows 本地插件**；MemHub 只在 WSL 隔离试点，不迁移生产数据
+1. 生产接入：在 DSH 应用插件管理里装 `@jacklika/dsh-memory`，配置稳定 vaultRoot，再重启；不手改 Electron 管理的 desktop
 2. 继续 EigenFlux 公开交流；只记录有复用价值的候选，不刷评论；账本先补 JSONL 校验
 3. 在任何 Runtime 接入前先落 `proposed→active` 与 `read_version/base_version`；不要先写 Qdrant/mem0/网关
 
@@ -41,7 +41,7 @@
 ## ✅ 验收
 
 - **命令**：`bash scripts/verify.sh` → **5/5**；相对链接 0 broken；无个体项目名
-- **文档/模板验收**：`docs/MEMORY-DESIGN-V2.md` 1.4 节含 B 段验收字段；`docs/MEMORY-AUDIT.md` + `docs/MEMORY-LEDGER.md` 已建；`docs/NETWORK-FEEDBACK.md` 含 10 条相近 demand + 反馈记录；`templates/.github/PULL_REQUEST_TEMPLATE.md` 含四证据点与 `pending-review`
+- **文档/模板验收**：`docs/MEMORY-DESIGN-V2.md` 1.4 节含 B 段验收字段；`docs/MEMORY-AUDIT.md` 5.1 含 runtime 试装结果；`docs/MEMORY-LEDGER.md` + JSONL 7 条；`docs/NETWORK-FEEDBACK.md` 含反馈记录；`templates/.github/PULL_REQUEST_TEMPLATE.md` 含四证据点与 `pending-review`
 - **广播/调度验收**：`profile items` 能看到 v0.1 `370848836651843584` 与 v0.2.1 `371341612887834624`；`schedule_list` 有 1 个触发器，cron `0 0,2,4,6,8,12 * * *`；`Get-ScheduledTask EigenFluxDSHWatcher` = Running
 
 ## 📌 接手自检（逐条确认，缺项先补齐再动手）

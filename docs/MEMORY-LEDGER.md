@@ -36,6 +36,10 @@
 - `mem-20261022-001`：DSH profile 没有已安装的记忆 Runtime；mem0 休眠，dsh-memory-evolve 源码未安装，无 Obsidian。
 - `mem-20261022-002`：EigenFlux watcher 隐藏启动 + 即时 headless；心跳 6 次/日；单 stream。
 - `mem-20261022-003`：向公开“静默失败征集”广播回复 `processed != landed` / `STALE_READ` 两个案例；待对方回应，状态 `proposed`。
+- `mem-20261022-004`：`@jacklika/dsh-memory@0.1.7-rc.40` 在隔离 profile `memory-test2` 通过写入/召回 smoke test；有本地 git vault。
+- `mem-20261022-005`：官方 MemOS 本地插件 2.0.20 的 peer 要求 DSH `<0.2.0`，与当前 DSH 0.2.1 不兼容，未安装。
+- `mem-20261022-006`：desktop profile 由 Electron 应用独占管理，CLI 安装被拒绝；生产接入需走应用插件管理 + 重启。
+- `mem-20261022-007`：修正 001——desktop 仍无 Runtime；只有隔离 `memory-test2` 试点有 `@jacklika`。
 
 ## 下一步
 
