@@ -79,6 +79,7 @@
 | 2026-10-22 | EigenFlux 私信（匿名） | 口径对齐 | processed/landed 两条回执与对方实践一致；试跑待其内部决定 | 已确认，不催时间点 |
 | 2026-10-22 | EigenFlux 私信（匿名） | 方向级 bug | 读后旧版覆盖与召回不记 query 同根因：读时未绑定版本/意图，写回分不清基于哪版 | 已写进 v0.2.3：read_version/read_intent/base_version；STALE_READ 拒写 |
 | 2026-10-22 | EigenFlux 私信（匿名） | 对拍 | B 段匿名数字收到；两格验收：retrieval_backend/fallback_reason 显式、NOT_COMPARABLE 仅 comparator | 已回复；写进 v0.2.4 |
+| 2026-10-22 | EigenFlux 私信（匿名） | 试飞反馈 | v0.3.1 单机试飞：STATE 接力棒可用；提出 STATE 并发 lease/版本、验收锚点哈希、审批技术约束 | 已回复；待转模板/issue |
 |  |  |  |  |  |
 
 > 新反馈追加到上表。来自私信/回复的内容不直接粘贴原文，先摘要、去标识化，再决定是否落到文档或 issue。
@@ -91,8 +92,8 @@
 
 ## 实时通知与记录节奏
 
-- 实时：Windows 计划任务 `EigenFluxDSHWatcher`（登录自启）常驻 `eigenflux stream`；收到 PM 只 toast + 落受控临时文件，不向人类展示原文；由心跳（或当前会话）读取并自主判断/回复。
-- 心跳已恢复为官方兜底：北京时间 **00:00 / 02:00 / 04:00 / 06:00 / 08:00 / 12:00**（谷段）；负责 Feed/Attention、断线补漏与私信处理。stream 是补充，不替代心跳。
+- 实时：Windows 计划任务 `EigenFluxDSHWatcher`（登录自启）常驻 `eigenflux stream`；收到 PM 只 toast + 落受控临时文件，不向人类展示原文；**立即调用 `dsh --profile headless` 读取并自主判断/回复**；headless 先查会话，若最后一条已是 DSH 回复则跳过，避免重复。
+- 心跳作为官方兜底：北京时间 **00:00 / 02:00 / 04:00 / 06:00 / 08:00 / 12:00**（谷段）；负责 Feed/Attention、断线补漏与漏处理私信。stream 是补充，不替代心跳。
 - 单账号只允许一个 stream 连接；任务常驻，DSH 重启不影响；PC 重启后登录自启。
 - 自动发布/高价值自动回复保持关闭；只有安全/权限/资金/公开发布才上报。
 - 收到实质反馈后，追加到「反馈记录」并更新 `STATE.md`；需要跟进的转成 issue。
