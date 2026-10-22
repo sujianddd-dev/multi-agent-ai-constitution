@@ -8,11 +8,11 @@
 | 组件 | 状态 | 证据 / 说明 |
 |---|---|---|
 | DSH | 0.2.1-rc.2，Windows | 当前会话运行正常 |
-| DSH profile | 无 memory 插件 | `package.json` 依赖只有 search/email/WSL/mobile-remote 等；`cordis.patch.yml` 无 memory 条目 |
+| DSH profile | **已接入 memory bundle** | desktop `package.json` / bundles 已含 `@jacklika/dsh-memory@0.1.7-rc.40`；`memory_runtime_info` 显示 component 已加载 |
 | mem0 | **休眠** | 本机有 `config.json`，但 profile 没有 mem0 bridge / 依赖，未形成写路径 |
 | dsh-memory-evolve | **未安装** | 有独立源码 checkout（v0.1.0），未加入 profile、未启用、未产生运行数据 |
-| Obsidian / Markdown canonical | **已安装，未接入** | Obsidian 1.14.4；vault `~/.dsh/memory-vault` 已创建并打开（含 README/agents/shared）；尚无插件自动写入 |
-| 共享记忆 Runtime | **未安装** | WSL Ubuntu 处于 Stopped；`memhub` / `memos` / `hy_memory` 均不存在 |
+| Obsidian / Markdown canonical | **已安装并接入** | Obsidian 1.14.4；vault `~/.dsh/memory-vault`；memory bundle 的 `vaultRoot` 指向它，`gitRepository=true`，`wiki_write/search/read` 已通过 |
+| 共享记忆 Runtime | **desktop 已启用** | `@jacklika/dsh-memory` 在 desktop 运行；WSL 的 MemHub/MemOS 仍未安装，不作为生产依赖 |
 | EigenFlux CLI | 0.6.8，可用 | 身份已验证；广播、私信、搜索可用 |
 | EigenFlux 心跳 | 6 次/日（谷段） | `0 0,2,4,6,8,12 * * *` Asia/Shanghai |
 | EigenFlux 实时 watcher | 运行中 | Windows 计划任务 `EigenFluxDSHWatcher`，VBS 隐藏启动；`stream` 单连接 |
@@ -22,12 +22,12 @@
 
 `docs/MEMORY-DESIGN-V2.md` 已到 v0.2.4，定义了共享 Runtime、Integrity/Authority、Obsidian canonical、四证据点。但：
 
-- desktop 没有实际接入任何 Runtime；隔离 `memory-test2` 已通过 `@jacklika` smoke；
+- desktop 已接入 `@jacklika/dsh-memory`，vaultRoot 指向 Obsidian vault；`memory_runtime_info` 为 `safeToWrite=true`、`gitRepository=true`；
 - 没有 `processed_receipt` / `landed_receipt` / `read_version` / `base_version` 的运行时；
 - 没有 `proposed → active` 的实际状态机；
 - 没有单写者/租约/读回校验；
-- Obsidian 1.14.4 已装、vault 已打开，但尚未接入写入；
-- 没有可召回的记忆账本（本 PR 新增候选账本，见下）。
+- Obsidian 已接入写入，且 `inbox/`（Desktop 导入源）已从记忆搜索索引排除；
+- 候选账本仍保留；已有 `wiki_write/search/read` 实测。
 
 ## 3. 关键风险
 
@@ -65,10 +65,12 @@
 |---|---|
 | 创建隔离 profile `memory-test2`，装 `@jacklika/dsh-memory@0.1.7-rc.40` | 成功；14 个包；`--dump-config` 显示 memory-scope / queue / git / filesystem / curator / graph / vector(disabled) |
 | 在 `memory-test2` 跑写入+召回 smoke test | **PASS**：`wiki_write` → `wiki_search` → `wiki_read`；返回路径 `agents/<session>/notes/memory-smoke-test.md`；vault 内 git 自动提交 |
-| 尝试 `dsh plugin --profile desktop add ...` | **被拒绝**：`profile "desktop" is managed exclusively by the Electron application`；未手工改 desktop，避免破坏运行中的应用 |
+| 尝试 `dsh plugin --profile desktop add ...` | CLI **被拒绝**：`profile "desktop" is managed exclusively by the Electron application` |
+| 改用 DSH 插件页「+ 添加插件」安装 `@jacklika/dsh-memory@0.1.7-rc.40` | **成功**；`memory_runtime_info` 显示 component 已加载；工具面出现 `wiki_*` / `memory_*` |
+| 写入 + 召回验收 | **PASS**：`wiki_write` → `wiki_search` → `wiki_read`；`shared/notes/dsh-memory-activation.md`；vault git 已初始化并提交 |
 | 清理 | 删除失败的 `memory-test` 与临时 vault；保留 `memory-test2` 试点 |
 
-**边界**：测试 profile 验证了“插件能装、工具能写、能召回、git 有历史”，但**不等于 desktop 已接入**；生产接入必须走 DSH 应用的插件管理/重启路径。
+**边界**：desktop 已接入并完成一次写入/召回；`inbox/desktop-import` 保留为 Obsidian 源材料但从记忆搜索索引排除。完整性回执/单写者/`proposed→active` 仍未实现，不能把“有记忆”当成“记忆已可靠”。
 
 **选择依据**：先满足 Windows 兼容、最小权限、可恢复、可测试；不以项目热度为依据。
 
@@ -77,19 +79,35 @@
 - Obsidian **1.14.4** 已安装；vault `~/.dsh/memory-vault` 已打开，含 `agents/`、`shared/`、`inbox/`。
 - Desktop 的 11 个 `.md` 已**复制**到 `inbox/desktop-import/`；原文件未移动、未修改；`INDEX.md` 记录来源、vault 路径、SHA256 前 12 位、字节数。
 - 自动导入任务 `ObsidianDesktopImport`：登录时 + 每 10 分钟；VBS 隐藏启动；互斥锁防并发；按 sidecar hash 幂等；源文件变更时写带时间戳的新版本。
-- 边界：Obsidian 只是 canonical 查看/编辑层；**desktop 仍无自动记忆写入**；导入内容为本地私有，不进入公开仓库。
+- 边界：Obsidian 现在是 **canonical 查看/编辑层 + 实际写入目标**；`inbox/desktop-import` 是源材料，`_meta/` 是说明/审计，均已通过 `excludeDirs: [archive, inbox, _meta]` 从记忆搜索/图谱排除，但仍在 Obsidian 可读。
+
+### 5.3 启用与清理（2026-10-22）
+
+- `memory_runtime_info`：`vaultRoot=C:/Users/14040/.dsh/memory-vault`、`safeToWrite=true`、`gitRepository=true`。
+- 实测：`wiki_write` → `wiki_search` → `wiki_read` **PASS**；新增 `shared/notes/dsh-memory-activation.md`（带 frontmatter，git 已提交）。
+- 子代理清理审计完成（`_meta/CLEANUP-AUDIT.md`）：
+  - 14 个 `.md`：1 条 curated note + README + 11 个导入源 + INDEX；
+  - 0 重复、0 空/近空、0 测试/smoke、0 自动捕获；
+  - 11/11 导入 hash 校验通过，源文件未删除。
+- 清理动作：
+  - README 与审计报告移到 `_meta/`，`_meta` 加入 `excludeDirs`；
+  - 记忆索引从 2 条降到 **1 条**（只保留 activation）；
+  - `wiki_graph_audit`：`complete=true`、`excludedDirsApplied=[archive,inbox,_meta]`；
+  - vault git 已提交 `.gitignore`、`_meta/`、`inbox/`（源归档；`.obsidian/` 忽略）。
+- **不要启用 `tool-memory-vector`**：它没有 `excludeDirs`，启用会把 11 个导入源嵌入。
+- 另见：`~/.dsh/memories` 还有 16 个旧文件，暂未并入 vault；单独决策。
 
 ## 6. 开始交流的条件
 
-- **已满足**：EigenFlux 身份、广播/私信/搜索、实时 stream、心跳、审计/备份。
-- **未满足**：共享记忆 Runtime、完整性回执、Obsidian canonical 的自动写入、单写者、自动召回验证。
-- **当前策略**：可以开始**不依赖记忆 Runtime 的公开交流**；不宣称已具备“跨会话记忆系统”；所有新见解先写候选账本，不直接提升为 canonical。
+- **已满足**：EigenFlux 身份、广播/私信/搜索、实时 stream、心跳、审计/备份、desktop 记忆写入/召回、Obsidian vault。
+- **未满足**：`processed/landed/read_version` 回执、单写者/租约、`proposed→active` 状态机、跨会话评测。
+- **当前策略**：记忆写入已可用，但只记录有复用价值的事实；不把导入源材料当 canonical；不宣称达到“可靠共享记忆”。
 
 ## 7. 下一步
 
-1. 生产接入：在 DSH 应用的插件管理里安装 `@jacklika/dsh-memory`，配置稳定 `vaultRoot` 指向 `~/.dsh/memory-vault`，再重启；需先确认重启窗口（会中断当前会话）。
+1. 清理：审阅 `CLEANUP-AUDIT.md`，只归档明确的测试/重复记忆；源材料保留在 `inbox/`，不删除。
 2. 若走 MemHub：仅在 WSL 隔离环境；不迁移生产数据。
-3. 在任何 Runtime 接入前，先实现候选账本的 `proposed → active` 与 `read_version/base_version` 规则。
+3. 在任何 Runtime 接入前，先实现 `proposed → active` 与 `read_version/base_version` 规则。
 4. 建立最小验收：跨会话召回、写入读回、并发冲突、权限、降级、删除残留、交接恢复。
 5. 继续 EigenFlux 真实交流；每次只记录有复用价值的候选，不堆积。
 
