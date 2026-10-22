@@ -9,15 +9,15 @@
 
 ## 🎯 当前任务（一次只写一个）
 
-- **目标**：在隔离 profile 验证可用记忆 runtime；desktop 不硬改；候选账本继续可追溯
-- **依据**：人类 2026-10-22 任务书与授权；`docs/MEMORY-AUDIT.md` 5.1 试装结果
+- **目标**：desktop 记忆已接入并验证写入/召回；清理无用/来源类记忆；保留 Obsidian canonical
+- **依据**：人类 2026-10-22 授权；`docs/MEMORY-AUDIT.md` 5.1–5.3；清理审计子代理运行中
 - **边界**：**仅交流**。不向任何外部 Agent 开放本机文件、shell、凭据、MCP 或远程访问；自动发布/高价值自动回复保持关闭；**私信由 DSH 按规则自行判断/回复，不把原文/草稿贴给人类**
 
 ## 📍 进度光标
 
 - EigenFlux CLI **0.6.8** 已装（用户级）；身份/资料/邮箱已在 Console 完成；Agent 名 **DSH**
 - 心跳：`EigenFlux 网络收件箱`，Asia/Shanghai，cron `0 0,2,4,6,8,12 * * *`（00/02/04/06/08/12，谷段）；常驻任务：`EigenFluxDSHWatcher`（登录自启，Running，**VBS 隐藏启动、无控制台窗口**）常驻 `eigenflux stream`，PM 只 toast + 落受控临时文件，再立即 headless 处理（已回复则跳过）；心跳兜底
-- 记忆：Obsidian 1.14.4 + `~/.dsh/memory-vault` 已开；Desktop `.md` 11 个已导入 `inbox/desktop-import/`（任务 `ObsidianDesktopImport` 登录 + 每 10 分钟）；desktop 仍无 memory 插件；隔离 `memory-test2` 装 `@jacklika/dsh-memory` 并通过 smoke；MemOS 2.0.20 peer 不兼容；`@jipika` 0.6.0 失败；账本 9 条 + `docs/MEMORY-AUDIT.md`
+- 记忆：desktop 已激活 `@jacklika/dsh-memory@0.1.7-rc.40`，vaultRoot=`~/.dsh/memory-vault`（safeToWrite/git=true，`wiki_write/search/read` PASS）；Obsidian 1.14.4 + 11 个 Desktop `.md` 导入；`inbox` 已从记忆索引排除；账本 12 条 + 清理审计子代理运行中
 - 广播已发布：v0.1 item `370848836651843584`（22/6/0）；v0.2.1 item `371341612887834624`（11 阅读 / 3 赞 / 0 广播回复；已回 7 条私信/公开回复）
 - 本地约定：Home `~/.eigenflux-dsh/.eigenflux`；skills target 已注册到 `~/.agents/skills`（host `deepseek-harness`）
 
@@ -41,7 +41,7 @@
 ## ✅ 验收
 
 - **命令**：`bash scripts/verify.sh` → **5/5**；相对链接 0 broken；无个体项目名
-- **文档/模板验收**：`docs/MEMORY-DESIGN-V2.md` 1.4 节含 B 段验收字段；`docs/MEMORY-AUDIT.md` 5.1/5.2 含 runtime 试装与 Obsidian 导入；`docs/MEMORY-LEDGER.md` + JSONL 9 条；`docs/NETWORK-FEEDBACK.md` 含反馈记录；`templates/.github/PULL_REQUEST_TEMPLATE.md` 含四证据点与 `pending-review`
+- **文档/模板验收**：`docs/MEMORY-AUDIT.md` 5.1/5.2/5.3 含试装、导入、启用与清理；`docs/MEMORY-LEDGER.md` + JSONL 12 条；`docs/NETWORK-FEEDBACK.md` 含反馈记录；`templates/.github/PULL_REQUEST_TEMPLATE.md` 含四证据点与 `pending-review`
 - **广播/调度验收**：`profile items` 能看到 v0.1 `370848836651843584` 与 v0.2.1 `371341612887834624`；`schedule_list` 有 1 个触发器，cron `0 0,2,4,6,8,12 * * *`；`Get-ScheduledTask EigenFluxDSHWatcher` = Running
 
 ## 📌 接手自检（逐条确认，缺项先补齐再动手）

@@ -42,6 +42,9 @@
 - `mem-20261022-007`：修正 001——desktop 仍无 Runtime；只有隔离 `memory-test2` 试点有 `@jacklika`。
 - `mem-20261022-008`：Obsidian 1.14.4 已安装，`memory-vault` 已打开；它只是 canonical 查看/编辑层，未接入自动写入。
 - `mem-20261022-009`：Desktop `.md` 自动导入已运行：11 个现有文件复制到 vault `inbox/desktop-import/`，带 `INDEX.md` 与 sidecar hash；登录时 + 每 10 分钟，copy-only。
+- `mem-20261022-010`：`@jacklika/dsh-memory@0.1.7-rc.40` 已在 desktop 激活；vaultRoot 指向 Obsidian vault，`safeToWrite=true`、`gitRepository=true`；写入/召回 PASS。
+- `mem-20261022-011`：`inbox/desktop-import` 从记忆索引/图谱排除（`excludeDirs: [archive, inbox]`），源文件保留在 Obsidian；索引只剩 README + activation 两条。
+- `mem-20261022-012`：无用/来源类记忆的清理审计已交给子代理，仍在运行；只审计、不删除源文件。
 
 ## 下一步
 
